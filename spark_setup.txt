@@ -1,0 +1,61 @@
+
+# DOWNLOAD AND INSTALL
+------------
+# Download
+https://www.apache.org/dyn/closer.lua/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
+
+# Create Spark directory
+sudo mkdir spark
+
+# Copy to Target folder
+sudo mv spark-3.5.5-bin-hadoop3.tgz /opt/spark
+ds.md
+# Extract
+sudo tar -zxvf spark-3.5.5-bin-hadoop3.tgz -C /opt/spark
+------------
+
+# ENVIRONMENT SETUP
+------------
+# On the host machine: Set environment variable
+export SPARK_MASTER_HOST=$(hostname -f)
+
+cd  /opt/spark/spark-3.5.5-bin-hadoop3/conf
+
+nano spark-env.sh.template
+export SPARK_MASTER_HOST=192.168.0.113 # on host
+export SPARK_MASTER_URL=spark://192.168.0.136:7077 # add the master node on workers
+save as spark-env.sh
+
+nano spark-defaults.conf
+export SPARK_MASTER_HOST=192.168.0.113 # on host
+spark.worker.memory 2g # on workers
+spark.worker.cores 1 # on workers
+
+
+# In spark-defaults.conf on master
+spark.master spark://192.168.0.136:7077
+spark.driver.host 192.168.0.136
+spark.driver.bindAddress 192.168.0.136
+
+# In spark-defaults.conf on workers
+spark.master spark://192.168.0.136:7077
+spark.worker.ui.port 8081
+------------
+
+# Start host
+cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
+./start-master.sh
+
+# Start Worker
+cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
+./start-worker.sh spark://192.168.0.136:7077
+
+# after moving spark application to location of spark install (/opt/spark/spark-3.5.5-bin-hadoop3/bin/):
+/opt/spark/spark-3.5.5-bin-hadoop3/bin/spark-submit --master spark://192.168.0.136:7077 transform_steps.py
+
+# RUNNING A JOB
+cd /opt/spark/spark-3.5.5-bin-hadoop3/bin/
+./spark-submit --master spark://192.168.0.136:7077 transform_steps2.py
+
+
+sudo mount your_nfs_server_ip:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files

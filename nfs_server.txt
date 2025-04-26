@@ -1,0 +1,93 @@
+
+Install the NFS Server Software (on your local machine):
+Open your terminal on your local computer and run the appropriate command for your operating system:
+Ubuntu/Debian:
+Bash
+sudo apt update
+sudo apt install nfs-kernel-server
+
+
+macOS:
+NFS server functionality is usually built-in. You'll need to configure it. This involves editing the /etc/exports file (you might need to create it if it doesn't exist) and starting the nfsd service. Be cautious when modifying system files, and you might find it easier to use a GUI tool if available.
+Other Linux distributions: Use the appropriate package manager (e.g., yum for CentOS/RHEL, pacman for Arch). The package name is usually similar to nfs-utils or nfs-kernel-server.
+Export the Directories (on your local machine):
+Edit the /etc/exports file on your local machine to specify the directories you want to share and the IP addresses or hostnames of your VMs that can access them.
+Bash
+sudo nano /etc/exports
+
+Add lines like this (replace /home/briean/development/health_stats with the actual path on your local machine and your_vm_ip_1 and your_vm_ip_2 with the IP addresses of your VMs):
+/home/briean/development/health_stats/raw_files your_vm_ip_1(rw,sync,no_subtree_check) your_vm_ip_2(rw,sync,no_subtree_check)
+/home/briean/development/health_stats/processed_files your_vm_ip_1(rw,sync,no_subtree_check) your_vm_ip_2(rw,sync,no_subtree_check)
+
+Important Security Note: Instead of *, it's highly recommended to specify the IP addresses of your VMs for better security.
+After editing, save and close the file. Then, export the shared directories:
+Bash
+sudo exportfs -arv
+
+
+Open Firewall Ports (on your local machine):
+If your local machine has a firewall enabled, you'll need to allow NFS traffic from your VMs. The specific commands will depend on your firewall software.
+Ubuntu (using ufw):
+Bash
+sudo ufw allow from <your_vm_ip_1> to any port nfs
+sudo ufw allow from <your_vm_ip_2> to any port nfs
+sudo ufw allow from vm_1 to any port 2049 proto tcp &&
+sudo ufw allow from vm_2 to any port 2049 proto tcp &&
+sudo ufw allow from vm_1 to any port 2049 proto udp &&
+sudo ufw allow from vm_2 to any port 2049 proto udp &&
+sudo ufw allow from vm_1 to any port 111 proto tcp &&
+sudo ufw allow from vm_2 to any port 111 proto tcp &&
+sudo ufw allow from vm_1 to any port 111 proto udp &&
+sudo ufw allow from vm_2 to any port 111 proto udp
+sudo ufw enable
+
+
+macOS: You'll need to configure the built-in firewall to allow incoming connections for the NFS services. You can usually do this through System Preferences > Security & Privacy > Firewall > Firewall Options. You might need to add rules for nfsd, rpcbind, and mountd.
+Other operating systems: Consult the documentation for your firewall. You'll typically need to allow traffic on ports 111 (rpcbind), 2049 (NFS), and potentially other dynamically assigned ports for mountd.
+Install NFS Client Software (on your VMs):
+This step remains the same on your datanode-vm1 and datanode-vm2:
+Ubuntu/Debian:
+Bash
+sudo apt update
+sudo apt install nfs-common
+
+
+CentOS/RHEL:
+Bash
+sudo yum install nfs-utils
+sudo systemctl enable rpcbind
+sudo systemctl start rpcbind
+
+
+Mount the NFS Shares (on your VMs):
+Create the mount points on your VMs:
+Bash
+sudo mkdir -p /home/briean/development/health_stats/raw_files
+sudo mkdir -p /home/briean/development/health_stats/processed_files
+
+Mount the NFS shares. Replace your_local_machine_ip with the IP address of your local computer:
+Bash
+sudo mount -t nfs your_local_machine_ip:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files
+sudo mount -t nfs your_local_machine_ip:/home/briean/development/health_stats/processed_files /home/briean/development/health_stats/processed_files
+
+To make these mounts persistent across reboots, add the following lines to the /etc/fstab file on each VM (replace your_local_machine_ip accordingly):
+Bash
+sudo nano /etc/fstab
+
+Add these lines:
+your_local_machine_ip:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files nfs defaults 0 0
+your_local_machine_ip:/home/briean/development/health_stats/processed_files /home/briean/development/health_stats/processed_files nfs defaults 0 0
+
+Save and close the file, then run:
+Bash
+sudo mount -a
+
+
+Copy Your Script and Data (to your local machine):
+Now, you'll keep your Python script (your_script_name.py) and the contents of your local raw_files/steps directory right where they are on your local machine. The VMs will access them through the NFS mounts.
+With this setup, your VMs will directly read and write to the specified folders on your local computer via the NFS mounts.
+The remaining steps to run your script are the same as outlined before:
+Submit your PySpark application: From one of your VMs, use spark-submit, pointing to the script's location on the mounted NFS file system (e.g., /home/briean/development/health_stats/your_script_name.py).
+Ensure the script's paths are correct: Double-check that the raw_directory and processed_directory variables in your Python script are set to the paths on the mounted NFS file system (e.g., /home/briean/development/health_stats/raw_files/steps).
+This approach can be very convenient for development and testing as it keeps your data and code readily accessible on your local machine. Just be mindful of network performance if you are dealing with very large datasets.
+Let me know if you'd like to proceed with setting up the NFS server on your local machine, and I can help you with the specific commands for your operating system!
