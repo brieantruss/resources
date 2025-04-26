@@ -55,7 +55,13 @@ cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
 
 # RUNNING A JOB
 cd /opt/spark/spark-3.5.5-bin-hadoop3/bin/
-./spark-submit --master spark://192.168.0.136:7077 transform_steps2.py
+
+./spark-submit --master spark://192.168.0.136:7077 transform_steps.py
+
+./spark-submit --master spark://192.168.0.79:7077 --jars /home/modulo/mysql_test/mysql-connector-j-9.1.0.jar --num-executors 3 --executor-cores 1 wikispark_cities0.py
+
+./spark-submit --master spark://192.168.0.79:7077 --conf "spark.driver.host=192.168.0.79" --jars /home/modulo/mysql_test/mysql-connector-j-9.1.0.jar --num-executors 3 --executor-cores 1 wikispark_cities100.py
 
 
-sudo mount your_nfs_server_ip:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files
+
+

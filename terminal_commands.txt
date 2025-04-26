@@ -1,3 +1,4 @@
+
 Command Line Index:
 https://ss64.com/bash/
 
@@ -13,6 +14,10 @@ Copy specific line from bottom of previous output:
 Linux Copy Syntax:
 cp home/shared-modulo-1/ /home/modulo/health_hub/data
 
+
+Reference Directory:
+cd /home/briean/development/reference
+
 Virtual Environment 
 Creation
 python3 -m venv .nuance
@@ -24,24 +29,6 @@ source .video_subs_reporting/bin/activate
 
 Deactivation
 deactivate
-
-SPARK Commands:
-
-
-master:
-sbin/start-master.sh
-sbin/stop-master.sh
-
-worker:
-sbin/start-worker.sh spark://192.168.0.79:7077
-sbin/stop-worker.sh spark://192.168.0.79:7077
-
-submit job
-spark-submit --master spark://192.168.0.79:7077 --num-executors 3 --executor-cores 1 wikispark_load_test.py
-
-spark-submit --master spark://192.168.0.79:7077 --jars /home/modulo/mysql_test/mysql-connector-j-9.1.0.jar --num-executors 3 --executor-cores 1 wikispark_cities0.py
-
-spark-submit --master spark://192.168.0.79:7077 --conf "spark.driver.host=192.168.0.79" --jars /home/modulo/mysql_test/mysql-connector-j-9.1.0.jar --num-executors 3 --executor-cores 1 wikispark_cities100.py
 
 MySQL Connection Command:
 sudo mysql -u root -p
@@ -55,25 +42,6 @@ rclone mount briean88: /home/modulo/health_hub/data  --allow-other --allow-non-e
 Kubernetes/K3s: 
 kubectl get nodes
 
-Expressvpn:
-expressvpn list all
-expressvpn status
-expressvpn connect [LOCATION] (e.g. expressvpn connect "USA - New York")
-
-expressvpn disconnect
-expressvpn connect "USA - Denver"
-expressvpn connect "Germany - Frankfurt - 3"
-
-VS Code:
-code
-
-Android Studio:
-cd /home/briean/android-studio-2024.2.1.12-linux/android-studio/bin
-./studio
-
-Plexamp:
-flatpak run com.plexamp.Plexamp
-
 Virtual Box:
 VBoxManage startvm vm-linux-1 --type headless
 
@@ -86,7 +54,7 @@ touch install_program.yaml
 
 ansible-playbook -i inventory install_ssh.yaml
 
------
+/*-----
 SSH SETUP:
 Network Connectivity and Host Resolution: 
 #Install the SSH server:
@@ -104,9 +72,8 @@ ssh-keygen -t rsa -b 4096
 /home/briean/.ssh/id_rsa
 
 #Pushing the key
-ssh-copy-id briean@192.168.0.113
-ssh-copy-id briean@192.168.0.99 && ssh-copy-id briean@192.168.0.250
-
+ssh-copy-id briean@192.168.0.113 # one remote
+ssh-copy-id briean@192.168.0.99 && ssh-copy-id briean@192.168.0.250 # two remotes
 
 Privilege Escalation:
 #Connecting remotely
@@ -118,7 +85,7 @@ sudo visudo
 
 #Edit the sudoers file
 briean ALL=(ALL:ALL) NOPASSWD: ALL
------
+-----*/
 
 Github:
 sudo apt install gh
@@ -146,11 +113,6 @@ scp /home/briean/Downloads/spark-3.5.5-bin-hadoop3.tgz briean@192.168.0.250:/hom
 
 Spark Directory
 cd /opt/spark/spark-3.5.5-bin-hadoop3
-
-
-
-
-
 
 spark-submit --master spark://192.168.0.136:7077 transform_steps.py
 
