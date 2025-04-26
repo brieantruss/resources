@@ -12,7 +12,7 @@ Copy specific line from bottom of previous output:
 !! | tail -n 4 | head -n 1 | xclip -selection clipboard
 
 Linux Copy Syntax:
-cp home/shared-modulo-1/ /home/modulo/health_hub/data
+cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/development/health_stats/
 
 
 Reference Directory:
