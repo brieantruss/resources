@@ -47,3 +47,11 @@ git cherry-pick <commit>    # Apply a specific commit from another branch
 git clone <repository_url>  # Download a repository from GitHub
 git pull origin main
 git add .                  # Stage all changes in the current directory
+
+# Creating a Local Directory and Connecting to GitHub
+
+gh repo create conn_drop_inv --public --clone
+cd my-project
+git add .
+git commit -m "Initial commit"
+git push -u origin master

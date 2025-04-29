@@ -1,6 +1,6 @@
 
 # DOWNLOAD AND INSTALL
-------------
+/*------------
 # Download
 https://www.apache.org/dyn/closer.lua/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
 
@@ -12,10 +12,10 @@ sudo mv spark-3.5.5-bin-hadoop3.tgz /opt/spark
 ds.md
 # Extract
 sudo tar -zxvf spark-3.5.5-bin-hadoop3.tgz -C /opt/spark
-------------
+------------*/
 
 # ENVIRONMENT SETUP
-------------
+/*------------
 # On the host machine: Set environment variable
 export SPARK_MASTER_HOST=$(hostname -f)
 
@@ -40,7 +40,7 @@ spark.driver.bindAddress 192.168.0.136
 # In spark-defaults.conf on workers
 spark.master spark://192.168.0.136:7077
 spark.worker.ui.port 8081
-------------
+------------*/
 
 # Start host
 cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
