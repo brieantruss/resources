@@ -116,3 +116,8 @@ cd /opt/spark/spark-3.5.5-bin-hadoop3
 
 spark-submit --master spark://192.168.0.136:7077 transform_steps.py
 
+# Open Files with Text Editor
+xdg-open your_file.txt
+
+# Open Files with LibreOffice Calc
+libreoffice --calc your_spreadsheet.ods
