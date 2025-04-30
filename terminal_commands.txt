@@ -15,8 +15,14 @@ Linux Copy Syntax:
 cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/development/health_stats/
 
 
-Reference Directory:
+# Reference Directory:
 cd /home/briean/development/reference
+
+# Spark Directory:
+cd /opt/spark/spark-3.5.5-bin-hadoop3
+
+# Arvig Directory:
+cd /home/briean/modulo/projects/arvig
 
 Virtual Environment 
 Creation
@@ -111,8 +117,7 @@ source /opt/data_env/bin/activate
 Copy From One Machine to Another
 scp /home/briean/Downloads/spark-3.5.5-bin-hadoop3.tgz briean@192.168.0.250:/home/briean
 
-Spark Directory
-cd /opt/spark/spark-3.5.5-bin-hadoop3
+
 
 spark-submit --master spark://192.168.0.136:7077 transform_steps.py
 
