@@ -26,7 +26,7 @@ cd /home/briean/modulo/projects/arvig
 
 Virtual Environment 
 Creation
-python3 -m venv .nuance
+python3 -m venv .video_subs
 python3 -m venv .health_hub_dagster
 
 Activation
