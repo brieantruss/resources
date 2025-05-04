@@ -1,4 +1,5 @@
 # Installation
+sudo apt install mysql-server
 
 
 # MySQL Workbench
