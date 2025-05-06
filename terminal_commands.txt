@@ -128,4 +128,5 @@ spark-submit --master spark://192.168.0.136:7077 transform_steps.py
 xdg-open your_file.txt
 
 # Open Files with LibreOffice Calc
-libreoffice --calc your_spreadsheet.ods
+libreoffice --calc 'Steps 2025.01.25 Samsung Health.csv'
+
