@@ -23,7 +23,7 @@ cd  /opt/spark/spark-3.5.5-bin-hadoop3/conf
 
 nano spark-env.sh.template
 export SPARK_MASTER_HOST=192.168.0.113 # on host
-export SPARK_MASTER_URL=spark://192.168.0.136:7077 # add the master node on workers
+export SPARK_MASTER_URL=spark://192.168.0.245:7077 # add the master node on workers
 save as spark-env.sh
 
 nano spark-defaults.conf
@@ -33,12 +33,12 @@ spark.worker.cores 1 # on workers
 
 
 # In spark-defaults.conf on master
-spark.master spark://192.168.0.136:7077
-spark.driver.host 192.168.0.136
-spark.driver.bindAddress 192.168.0.136
+spark.master spark://192.168.0.245:7077
+spark.driver.host 192.168.0.245
+spark.driver.bindAddress 192.168.0.245
 
 # In spark-defaults.conf on workers
-spark.master spark://192.168.0.136:7077
+spark.master spark://192.168.0.245:7077
 spark.worker.ui.port 8081
 ------------*/
 
@@ -48,15 +48,15 @@ cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
 
 # Start Worker
 cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
-./start-worker.sh spark://192.168.0.136:7077
+./start-worker.sh spark://192.168.0.245:7077
 
 # after moving spark application to location of spark install (/opt/spark/spark-3.5.5-bin-hadoop3/bin/):
-/opt/spark/spark-3.5.5-bin-hadoop3/bin/spark-submit --master spark://192.168.0.136:7077 transform_steps.py
+/opt/spark/spark-3.5.5-bin-hadoop3/bin/spark-submit --master spark://192.168.0.245:7077 transform_steps.py
 
 # RUNNING A JOB
 cd /opt/spark/spark-3.5.5-bin-hadoop3/bin/
 
-./spark-submit --master spark://192.168.0.136:7077 transform_steps.py
+./spark-submit --master spark://192.168.0.245:7077 transform_steps.py
 
 ./spark-submit --master spark://192.168.0.79:7077 --jars /home/modulo/mysql_test/mysql-connector-j-9.1.0.jar --num-executors 3 --executor-cores 1 wikispark_cities0.py
 
