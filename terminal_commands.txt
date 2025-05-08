@@ -120,7 +120,7 @@ source /opt/data_env/bin/activate
 Copy From One Machine to Another
 scp /home/briean/Downloads/spark-3.5.5-bin-hadoop3.tgz briean@192.168.0.250:/home/briean
 
-
+scp /home/briean/development/health_stats/transform_steps.py briean@192.168.0.245:/opt/spark/spark-3.5.5-bin-hadoop3/bin/
 
 spark-submit --master spark://192.168.0.136:7077 transform_steps.py
 

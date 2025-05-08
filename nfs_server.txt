@@ -12,6 +12,7 @@ NFS server functionality is usually built-in. You'll need to configure it. This 
 Other Linux distributions: Use the appropriate package manager (e.g., yum for CentOS/RHEL, pacman for Arch). The package name is usually similar to nfs-utils or nfs-kernel-server.
 Export the Directories (on your local machine):
 Edit the /etc/exports file on your local machine to specify the directories you want to share and the IP addresses or hostnames of your VMs that can access them.
+
 Bash
 sudo nano /etc/exports
 
