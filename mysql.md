@@ -17,6 +17,7 @@ FLUSH PRIVILEGES;
 
 ### Create a user
 CREATE USER 'briean'@'%' IDENTIFIED BY 'briean';
+grant all on *.* to 'briean'@'localhost';
 
 ### Exit MySQL
 EXIT;
