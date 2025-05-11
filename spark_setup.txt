@@ -22,23 +22,29 @@ export SPARK_MASTER_HOST=$(hostname -f)
 cd  /opt/spark/spark-3.5.5-bin-hadoop3/conf
 
 nano spark-env.sh.template
-export SPARK_MASTER_HOST=192.168.0.113 # on host
-export SPARK_MASTER_URL=spark://192.168.0.245:7077 # add the master node on workers
+export SPARK_LOCAL_IP=192.168.0.106
+
+spark.master spark://192.168.0.106:7077
+spark.driver.host 192.168.0.106
+spark.driver.bindAddress 192.168.0.106
+
+export SPARK_MASTER_HOST=192.168.0.106 # on host
+export SPARK_MASTER_URL=spark://192.168.0.106:7077 # add the master node on workers
 save as spark-env.sh
 
 nano spark-defaults.conf
-export SPARK_MASTER_HOST=192.168.0.113 # on host
+export SPARK_MASTER_HOST=192.168.0.106 # on host
 spark.worker.memory 2g # on workers
 spark.worker.cores 1 # on workers
 
 
 # In spark-defaults.conf on master
-spark.master spark://192.168.0.245:7077
-spark.driver.host 192.168.0.245
+spark.master spark://192.168.0.106:7077
+spark.driver.host 192.168.0.106
 spark.driver.bindAddress 192.168.0.245
 
 # In spark-defaults.conf on workers
-spark.master spark://192.168.0.245:7077
+spark.master spark://192.168.0.10:7077
 spark.worker.ui.port 8081
 ------------*/
 
