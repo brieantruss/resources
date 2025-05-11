@@ -87,6 +87,8 @@ ssh-keygen -t rsa -b 4096
 #Pushing the key
 ssh-copy-id briean@192.168.0.113 # one remote
 ssh-copy-id briean@192.168.0.99 && ssh-copy-id briean@192.168.0.250 # two remotes
+ssh-copy-id briean@192.168.0.106 && ssh-copy-id briean@192.168.0.107 && ssh-copy-id briean@192.168.0.108
+
 
 Privilege Escalation:
 #Connecting remotely
