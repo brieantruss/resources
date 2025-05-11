@@ -51,8 +51,12 @@ rclone mount briean88: /home/modulo/health_hub/data  --allow-other --allow-non-e
 Kubernetes/K3s: 
 kubectl get nodes
 
-Virtual Box:
+# VirtualBox
+## Starting a machine
 VBoxManage startvm vm-linux-1 --type headless
+
+## Stopping a machine
+VBoxManage controlvm "vm-linux-1" acpipowerbutton
 
 Ansible:
 sudo apt install ansible
