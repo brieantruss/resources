@@ -73,7 +73,7 @@ sudo mkdir -p /home/briean/development/health_stats/processed_files
 
 Mount the NFS shares. Replace your_local_machine_ip with the IP address of your local computer:
 Bash
-sudo mount -t nfs your_local_machine_ip:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files
+sudo mount -t nfs 192.168.0.105:/home/briean/development/health_stats/raw_files /home/briean/development/health_stats/raw_files
 sudo mount -t nfs your_local_machine_ip:/home/briean/development/health_stats/processed_files /home/briean/development/health_stats/processed_files
 
 To make these mounts persistent across reboots, add the following lines to the /etc/fstab file on each VM (replace your_local_machine_ip accordingly):
