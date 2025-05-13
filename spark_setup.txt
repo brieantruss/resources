@@ -54,7 +54,7 @@ cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
 
 # Start Worker
 cd  /opt/spark/spark-3.5.5-bin-hadoop3/sbin
-./start-worker.sh spark://192.168.0.245:7077
+./start-worker.sh spark://192.168.0.106:7077
 
 # after moving spark application to location of spark install (/opt/spark/spark-3.5.5-bin-hadoop3/bin/):
 /opt/spark/spark-3.5.5-bin-hadoop3/bin/spark-submit --master spark://192.168.0.245:7077 transform_steps.py

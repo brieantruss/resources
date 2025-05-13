@@ -55,3 +55,12 @@ cd my-project
 git add .
 git commit -m "Initial commit"
 git push -u origin master
+
+# Merging Changes to Main
+git checkout main
+git pull origin main
+git merge <your-feature-branch-name>
+# (Resolve conflicts if any, and then git add and git commit)
+git push origin main
+# (Optional) git branch -d <your-feature-branch-name>
+# (Optional) git push origin --delete <your-feature-branch-name>
