@@ -35,6 +35,18 @@ http://localhost:8081/
 Get pw from the following file:
 nano simple_auth_manager_passwords.json.generated
 
+# Kill Processes
+pkill -9 -f "airflow"
+pkill -9 -f "gunicorn"
+pkill -9 -f "uvicorn"
+
+# Check for remaining processes
+ps aux | grep -e "airflow" -e "gunicorn" -e "uvicorn" | grep -v "grep" #check that nothing is running
+
+# Clear cache
+find . -name "*.pyc" -delete
+find . -name "__pycache__" -exec rm -rf {} +
+
 ## Current Login: 20250527
 admin
 Ymg6efnFrdVmZZrG
