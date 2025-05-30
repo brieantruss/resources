@@ -5,6 +5,7 @@ pip3 install apache-airflow
 
 # Start server
 airflow api-server
+airflow api-server -p 8081 # open using a specific port e.g. 8081
 
 # Start scheduler
 airflow scheduler -D
