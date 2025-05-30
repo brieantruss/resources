@@ -1,17 +1,35 @@
-# Airflow
+# Airflow v2.10.5
 
 # Installation
-pip3 install apache-airflow
+pip install --upgrade pip
+
+pip install apache-airflow==2.10.5
+
+pip install apache-airflow-providers-google==10.12.0 apache-airflow-providers-cncf-kubernetes==7.11.0 # Specify provider versions compatible with Airflow 2.8.1, check Airflow docs if issues arise
+
+pip install pyspark google-api-python-client google-auth-httplib2 google-auth-oauthlib flask_appbuilder
+
+## Initialize the db
+airflow db migrate
+
+## Create a user
+airflow users create \
+    --username admin \
+    --firstname Your \
+    --lastname Name \
+    --role Admin \
+    --email your_email@example.com
+# Set a strong password when prompted.
 
 # Start server
-airflow api-server
-airflow api-server -p 8081 # open using a specific port e.g. 8081
+airflow webserver
+airflow webserver -p 8081 # open using a specific port e.g. 8081
 
 # Start scheduler
 airflow scheduler -D
 
 # Visit server
-http://localhost:8080/
+http://localhost:8081/
 
 # Login
 Get pw from the following file:
