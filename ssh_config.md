@@ -8,6 +8,7 @@ sudo systemctl enable --now ssh
 
 ### Verify SSH is running:
 sudo systemctl status ssh
+sudo systemctl status sshd
 
 ## SSH Access:
 ### SSH Keygen
