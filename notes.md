@@ -41,7 +41,7 @@ cd /home/briean/modulo/projects/arvig
 ## Health Stats Directory:
 cd /home/briean/development/health_stats
 
-# Virtual Environment 
+# Virtual Environments 
 
 ## Creation
 python3 -m venv .video_subs
