@@ -50,7 +50,7 @@ git add .                  # Stage all changes in the current directory
 
 # Creating a Local Directory and Connecting to GitHub
 
-gh repo create conn_drop_inv --public --clone
+gh repo create conn_drop_inv --private --clone
 cd my-project
 git add .
 git commit -m "Initial commit"
