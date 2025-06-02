@@ -13,21 +13,22 @@ sudo systemctl status sshd
 ## SSH Access:
 ### SSH Keygen
 ssh-keygen -t rsa -b 4096
-/home/briean/.ssh/id_rsa
+/home/modulo/.ssh/id_rsa
 
 ### Pushing the key
-ssh-copy-id briean@192.168.0.113 # one remote
-ssh-copy-id briean@192.168.0.99 && ssh-copy-id briean@192.168.0.250 # two remotes
-ssh-copy-id briean@192.168.0.106 && ssh-copy-id briean@192.168.0.107 && ssh-copy-id briean@192.168.0.108
+ssh-copy-id modulo@192.168.0.110
+ssh-copy-id modulo@192.168.0.111 # one remote
+ssh-copy-id modulo@192.168.0.112 && ssh-copy-id modulo@192.168.0.113 # two remotes
+ssh-copy-id modulo@192.168.0.111 && ssh-copy-id modulo@192.168.0.112 && ssh-copy-id modulo@192.168.0.113
 
 
 ## Privilege Escalation:
 ### Connecting remotely
 sudo apt install sshpass
-ssh briean@192.168.0.113
+ssh modulo@192.168.0.113
 
 ### Open the sudoers file
 sudo visudo
 
 ### Edit the sudoers file
-briean ALL=(ALL:ALL) NOPASSWD: ALL
+modulo ALL=(ALL:ALL) NOPASSWD: ALL

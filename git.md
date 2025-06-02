@@ -1,3 +1,12 @@
+# Install
+
+sudo apt install gh
+
+## Connect to Github Account
+
+gh auth login
+https://github.com/btruss13
+
 # Basic Git Commands
 
 git clone <repository_url>  # Download a repository from GitHub
@@ -15,14 +24,14 @@ git pull                   # Fetch and merge changes from the remote repository
 git status                 # Check the status of your working directory
 git diff                   # See the differences between your changes and the last commit
 
-# Branching and Merging
+## Branching and Merging
 
 git branch                 # List all branches
 git branch <branch_name>   # Create a new branch
 git checkout <branch_name> # Switch to a different branch
 git merge <branch_name>    # Merge a branch into the current branch
 
-# Other Useful Commands
+## Other Useful Commands
 
 git log                    # View commit history
 git reset --hard HEAD       # Discard all changes in the working directory
@@ -30,25 +39,25 @@ git checkout -- <file>     # Discard changes to a specific file
 git stash                  # Temporarily save changes that aren't ready to be committed
 git stash pop              # Restore stashed changes
 
-# GitHub-Specific (using the 'gh' CLI)
+## GitHub-Specific (using the 'gh' CLI)
 
 gh repo clone <username>/<repository>  # Clone a repository using 'gh'
 gh issue create              # Create a new issue
 gh pr create                 # Create a new pull request
 gh pr list                   # List open pull requests
 
-# Advanced Commands (use with caution)
+## Advanced Commands (use with caution)
 
 git rebase <branch_name>   # Re-apply commits on top of another branch (can rewrite history)
 git cherry-pick <commit>    # Apply a specific commit from another branch
 
-# My Favorites
+## My Favorites
 
 git clone <repository_url>  # Download a repository from GitHub
 git pull origin main
 git add .                  # Stage all changes in the current directory
 
-# Creating a Local Directory and Connecting to GitHub
+## Creating a Local Directory and Connecting to GitHub
 
 gh repo create conn_drop_inv --private --clone
 cd my-project
@@ -56,11 +65,20 @@ git add .
 git commit -m "Initial commit"
 git push -u origin master
 
-# Merging Changes to Main
+## Merging Changes to Main
+
 git checkout main
 git pull origin main
 git merge <your-feature-branch-name>
-# (Resolve conflicts if any, and then git add and git commit)
+
+## (Resolve conflicts if any, and then git add and git commit)
+
 git push origin main
-# (Optional) git branch -d <your-feature-branch-name>
-# (Optional) git push origin --delete <your-feature-branch-name>
+
+## (Optional) 
+
+git branch -d <your-feature-branch-name>
+
+## (Optional) 
+
+git push origin --delete <your-feature-branch-name>

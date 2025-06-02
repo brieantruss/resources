@@ -7,6 +7,9 @@ enp0s3
 
 
 # Edit the Network Configuration File: 
+Go to:
+cd /etc/netplan/
+
 List the files in this directory to find the relevant one:
 ls /etc/netplan/*.yaml
 
@@ -25,8 +28,8 @@ network:
     eth0:  # Replace 'eth0' with the actual name of your interface
       dhcp4: no
       addresses:
-        - 192.168.1.100/24  # Your desired static IP address and subnet mask
-      gateway4: 192.168.1.1    # Your network's gateway IP address (usually your router)
+        - 192.168.1.111/24  # Your desired static IP address and subnet mask
+      gateway4: 192.168.0.1    # Your network's gateway IP address (usually your router)
       nameservers:
         addresses: [8.8.8.8, 8.8.4.4] # Your desired DNS server addresses
 
@@ -42,6 +45,7 @@ nameservers:: Specifies the DNS servers your VM will use to resolve domain names
 
 # Apply the New Configuration: 
 After you've edited the YAML file, save it and exit the text editor. Then, apply the new network configuration using the following command:
+sudo netplan try
 sudo netplan apply
 
 This command tells Netplan to read your configuration and apply the settings.
