@@ -5,22 +5,22 @@ sudo apt install gh
 ## Connect to Github Account
 
 gh auth login
+
+-- select https
+-- web browser
+
 https://github.com/btruss13
 
 # Basic Git Commands
 
 git clone <repository_url>  # Download a repository from GitHub
 git init                   # Initialize a new Git repository in the current directory
-
 git add <file>             # Stage a file for commit
 git add .                  # Stage all changes in the current directory
 git add -A                 # Stage all changes (new, modified, deleted)
-
 git commit -m "Your commit message"  # Commit staged changes with a message
-
 git push                   # Push committed changes to the remote repository
 git pull                   # Fetch and merge changes from the remote repository
-
 git status                 # Check the status of your working directory
 git diff                   # See the differences between your changes and the last commit
 
