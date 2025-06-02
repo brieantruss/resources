@@ -13,7 +13,7 @@ Export the Directories (on your local machine):
 Edit the /etc/exports file on your local machine to specify the directories you want to share and the IP addresses or hostnames of your VMs that can access them.
 
 Bash
-sudo nano /etc/exports
+sudo nano /etc/fstab
 
 Add lines like this (replace /home/briean/development/health_stats with the actual path on your local machine and your_vm_ip_1 and your_vm_ip_2 with the IP addresses of your VMs):
 /home/briean/development/health_stats/raw_files your_vm_ip_1(rw,sync,no_subtree_check) your_vm_ip_2(rw,sync,no_subtree_check)

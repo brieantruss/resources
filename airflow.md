@@ -25,8 +25,8 @@ airflow users create \
 airflow webserver
 airflow webserver -p 8081 # open using a specific port e.g. 8081
 
-# Start scheduler
-airflow scheduler -D
+# Start scheduler and server
+airflow scheduler -D && airflow webserver -p 8081
 
 # Visit server
 http://localhost:8081/
@@ -40,14 +40,20 @@ pkill -9 -f "airflow"
 pkill -9 -f "gunicorn"
 pkill -9 -f "uvicorn"
 
-# Check for remaining processes
-ps aux | grep -e "airflow" -e "gunicorn" -e "uvicorn" | grep -v "grep" #check that nothing is running
-
 # Clear cache
 find . -name "*.pyc" -delete
 find . -name "__pycache__" -exec rm -rf {} +
+
+# Check for remaining processes
+ps aux | grep -e "airflow" -e "gunicorn" -e "uvicorn" | grep -v "grep" #check that nothing is running
+
+
 
 ## Current Login: 20250527
 admin
 Ymg6efnFrdVmZZrG
 
+### Error: Already running on PID 9210 (or pid file '/home/briean/airflow/airflow-webserver.pid' is stale)
+
+
+rm /home/briean/airflow/airflow-webserver.pid

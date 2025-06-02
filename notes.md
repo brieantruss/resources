@@ -41,6 +41,9 @@ cd /home/briean/modulo/projects/arvig
 ## Health Stats Directory:
 cd /home/briean/development/health_stats
 
+## Print tree structure
+tree cwd
+
 # Virtual Environments 
 
 ## Creation
