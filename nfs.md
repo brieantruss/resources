@@ -1,14 +1,13 @@
 
-Install the NFS Server Software (on your local machine):
+# Install the NFS Server Software (on your local machine):
+
 Open your terminal on your local computer and run the appropriate command for your operating system:
-Ubuntu/Debian:
+
+## Ubuntu/Debian:
 Bash
 sudo apt update
 sudo apt install nfs-kernel-server
 
-
-macOS:
-NFS server functionality is usually built-in. You'll need to configure it. This involves editing the /etc/exports file (you might need to create it if it doesn't exist) and starting the nfsd service. Be cautious when modifying system files, and you might find it easier to use a GUI tool if available.
 Other Linux distributions: Use the appropriate package manager (e.g., yum for CentOS/RHEL, pacman for Arch). The package name is usually similar to nfs-utils or nfs-kernel-server.
 Export the Directories (on your local machine):
 Edit the /etc/exports file on your local machine to specify the directories you want to share and the IP addresses or hostnames of your VMs that can access them.
@@ -26,7 +25,7 @@ Bash
 sudo exportfs -arv
 
 
-Open Firewall Ports (on your local machine):
+## Open Firewall Ports (on your local machine):
 If your local machine has a firewall enabled, you'll need to allow NFS traffic from your VMs. The specific commands will depend on your firewall software.
 Ubuntu (using ufw):
 Bash
@@ -50,7 +49,8 @@ sudo ufw enable
 
 macOS: You'll need to configure the built-in firewall to allow incoming connections for the NFS services. You can usually do this through System Preferences > Security & Privacy > Firewall > Firewall Options. You might need to add rules for nfsd, rpcbind, and mountd.
 Other operating systems: Consult the documentation for your firewall. You'll typically need to allow traffic on ports 111 (rpcbind), 2049 (NFS), and potentially other dynamically assigned ports for mountd.
-Install NFS Client Software (on your VMs):
+
+## Install NFS Client Software (on your VMs):
 This step remains the same on your datanode-vm1 and datanode-vm2:
 Ubuntu/Debian:
 Bash
@@ -65,7 +65,7 @@ sudo systemctl enable rpcbind
 sudo systemctl start rpcbind
 
 
-Mount the NFS Shares (on your VMs):
+## Mount the NFS Shares (on your VMs):
 Create the mount points on your VMs:
 Bash
 sudo mkdir -p /home/briean/development/health_stats/raw_files
@@ -89,7 +89,7 @@ Bash
 sudo mount -a
 
 
-Copy Your Script and Data (to your local machine):
+## Copy Your Script and Data (to your local machine):
 Now, you'll keep your Python script (your_script_name.py) and the contents of your local raw_files/steps directory right where they are on your local machine. The VMs will access them through the NFS mounts.
 With this setup, your VMs will directly read and write to the specified folders on your local computer via the NFS mounts.
 The remaining steps to run your script are the same as outlined before:
