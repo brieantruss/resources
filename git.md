@@ -82,3 +82,7 @@ git branch -d <your-feature-branch-name>
 ## (Optional) 
 
 git push origin --delete <your-feature-branch-name>
+
+## Get an updated file from the remote repo
+git checkout <file_name>
+git pull

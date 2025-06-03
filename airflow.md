@@ -36,14 +36,22 @@ Get pw from the following file:
 nano simple_auth_manager_passwords.json.generated
 
 # Kill Processes
-pkill -9 -f "airflow"
-pkill -9 -f "gunicorn"
-pkill -9 -f "uvicorn"
+echo "--- Stopping Airflow services ---"
+# Deactivate any active virtual environment (harmless if not active)
+deactivate 2>/dev/null || true
 
-# Clear cache
-find . -name "*.pyc" -delete
-find . -name "__pycache__" -exec rm -rf {} +
+# Kill any Airflow processes gracefully (if running as daemons)
+pkill -f "airflow webserver" || true
+pkill -f "airflow scheduler" || true
+pkill -f "airflow celery worker" || true
+pkill -f "airflow celery flower" || true
 
+# Clean up any residual PID files (sometimes airflow processes get stuck)
+rm -f ~/airflow/airflow-webserver.pid || true
+rm -f ~/airflow/airflow-scheduler.pid || true
+rm -f ~/airflow/airflow-worker.pid || true # Worker's PID if it creates one here
+
+echo "Airflow services stopped."
 # Check for remaining processes
 ps aux | grep -e "airflow" -e "gunicorn" -e "uvicorn" | grep -v "grep" #check that nothing is running
 
@@ -57,3 +65,7 @@ Ymg6efnFrdVmZZrG
 
 
 rm /home/briean/airflow/airflow-webserver.pid
+
+### Activate airflow env on cluster
+
+source ~/airflow/airflow_env/bin/activate
