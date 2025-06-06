@@ -136,7 +136,7 @@ with DAG(
     GCS_KEY_PATH = f"{PIPELINE_BASE_PATH}/gcs_key/healthhub-425207-3fe090d13b2d.json"
 
     # IMPORTANT: Replace <Pi5_IP_Address> with the actual IP address of your Raspberry Pi 5.
-    SPARK_MASTER_URL = "spark://<Pi5_IP_Address>:7077"
+    SPARK_MASTER_URL = "spark://192.168.0.110:7077"
 
     extract_task = BashOperator(
         task_id='run_extract_pyspark',
@@ -609,7 +609,7 @@ Verify Spark Master UI: Open a web browser on your local machine and go to http:
 Start Spark Workers (On each Pi 4):
 Ensure Spark environment variables are loaded: source /etc/profile.d/spark.sh (or re-login).
 Bash
-  start-worker.sh spark://<Pi5_IP_Address>:7077
+  start-worker.sh spark://192.168.0.110:7077
 
 
 Check the Spark Master UI on Pi 5 (http://<Pi5_IP_Address>:8080) to confirm that each worker has successfully registered.

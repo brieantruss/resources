@@ -47,8 +47,7 @@ tree cwd
 # Virtual Environments 
 
 ## Creation
-python3 -m venv .video_subs
-python3 -m venv .health_hub_dagster
+python3 -m venv .health_stats
 
 ## Activation
 source .gtd_media/bin/activate
