@@ -14,12 +14,17 @@ airflow db migrate
 
 ## Create a user
 airflow users create \
-    --username admin \
-    --firstname Your \
-    --lastname Name \
+    --username modulo \
+    --firstname modulo \
+    --lastname modulo \
     --role Admin \
-    --email your_email@example.com
+    --email btruss@moduloinsights.com
 # Set a strong password when prompted.
+
+## Activate virtual environment 
+cd ~/airflow/
+source ~/airflow/airflow_env/bin/activate
+
 
 # Start server
 airflow webserver

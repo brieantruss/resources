@@ -3,7 +3,7 @@ First, you need to know the name of your network interface. Open a terminal on y
 ip a
 
 Look for an interface that's likely connected to your network. Common names are eth0, enp0s3, ensX (where X is a number), or similar. Note down the name of this interface.
-enp0s3
+eth0
 
 
 # Edit the Network Configuration File: 
@@ -13,9 +13,12 @@ cd /etc/netplan/
 List the files in this directory to find the relevant one:
 ls /etc/netplan/*.yaml
 
-There might be a single file (like 01-netcfg.yaml or 50-cloud-init.yaml). Open this file using a text editor with sudo privileges (like nano):
-sudo nano /etc/netplan/YOUR_FILENAME.yaml
 
+
+There might be a single file (like 01-netcfg.yaml or 50-cloud-init.yaml). Open this file using a text editor with sudo privileges (like nano):
+
+sudo cp 50-cloud-init.yaml 50-cloud-init_backup.yaml
+sudo nano 50-cloud-init_backup.yaml
 Important: Be very careful when editing YAML files. Indentation is crucial! Use spaces, not tabs.
 
 
@@ -23,27 +26,22 @@ Important: Be very careful when editing YAML files. Indentation is crucial! Use 
 Inside the YAML file, you'll likely see some existing configuration (possibly for DHCP). You'll need to modify or replace it to set a static IP. Here's a common example of how a static IP configuration might look (adjust the values to match your network):
 network:
   version: 2
-  renderer: networkd
+  renderer: networkd # or NetworkManager, depending on your system and preference
   ethernets:
-    eth0:  # Replace 'eth0' with the actual name of your interface
+    # Replace 'eth0' with your actual network interface name (e.g., ens160, enp0s3)
+    eth0:
       dhcp4: no
       addresses:
-        - 192.168.1.111/24  # Your desired static IP address and subnet mask
-      gateway4: 192.168.0.1    # Your network's gateway IP address (usually your router)
+        - 192.168.0.110/24 # Your desired static IP address and subnet mask
+      routes:
+        - to: default
+          via: 192.168.0.1 # Your default gateway IP address
       nameservers:
-        addresses: [8.8.8.8, 8.8.4.4] # Your desired DNS server addresses
-
-
-# Explanation of the fields:
-ethernets:: Defines the Ethernet interfaces.
-eth0:: Replace this with the actual name of your network interface you identified in step 1.
-dhcp4: no: Disables DHCP for IPv4 on this interface.
-addresses:: A list of IP addresses and their subnet masks. The /24 in the example represents a common subnet mask of 255.255.255.0. Adjust this if your network uses a different subnet.
-gateway4:: The IP address of your network's gateway (usually your router). You can often find this information on your host Ubuntu Desktop system's network settings.
-nameservers:: Specifies the DNS servers your VM will use to resolve domain names. Google's public DNS servers (8.8.8.8 and 8.8.4.4) are a common choice, but you can use others.
-
-
+        addresses:
+          - 8.8.8.8    # Primary DNS server (e.g., Google DNS)
+          - 8.8.4.4    # Secondary DNS server
 # Apply the New Configuration: 
+
 After you've edited the YAML file, save it and exit the text editor. Then, apply the new network configuration using the following command:
 sudo netplan try
 sudo netplan apply

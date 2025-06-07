@@ -13,6 +13,8 @@ scp /home/briean/Downloads/spark-3.5.5-bin-hadoop3.tgz modulo@192.168.0.110:/hom
 
 sudo mkdir spark
 
+sudo mkdir /opt/spark
+
 ## Copy to Target folder
 
 sudo mv spark-3.5.5-bin-hadoop3.tgz /opt/spark
@@ -30,17 +32,16 @@ sudo tar -zxvf spark-3.5.5-bin-hadoop3.tgz -C /opt/spark
 
 ## Set environment variables
 
-#### on host
-
 export SPARK_MASTER_HOST=$(hostname -f)
+
+
+#### on host
 
 cd  /opt/spark/spark-3.5.5-bin-hadoop3/conf
 
 nano spark-env.sh.template
 
 ### Add the following to the bottom of the file
-
-#### on host
 
 export SPARK_LOCAL_IP=192.168.0.110 
 
@@ -56,7 +57,7 @@ cd  /opt/spark/spark-3.5.5-bin-hadoop3/conf
 
 nano spark-env.sh.template
 
-##### add to bottom of file
+### Add the following to the bottom of the file
 
 export SPARK_MASTER_URL=spark://192.168.0.110:7077 
 
@@ -73,6 +74,9 @@ export SPARK_MASTER_HOST=192.168.0.110 # on host
 spark.master spark://192.168.0.110:7077
 spark.driver.host 192.168.0.110
 spark.driver.bindAddress 192.168.0.110
+# spark.master spark://192.168.0.110:7077
+# spark.driver.host 192.168.0.110
+# spark.driver.bindAddress 192.168.0.110
 
 #### on workers
 
