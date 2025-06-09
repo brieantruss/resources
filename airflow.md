@@ -26,12 +26,18 @@ cd ~/airflow/
 source ~/airflow/airflow_env/bin/activate
 
 
-# Start server
+## Start server
 airflow webserver
 airflow webserver -p 8081 # open using a specific port e.g. 8081
 
-# Start scheduler and server
+## Start scheduler and server
 airflow scheduler -D && airflow webserver -p 8081
+
+## Start Server and run with no hangup 
+
+nohup airflow webserver -p 8082 &
+
+##
 
 # Visit server
 http://localhost:8081/

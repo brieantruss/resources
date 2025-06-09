@@ -22,8 +22,8 @@ FLUSH PRIVILEGES;
 
 ### Create a user
 
-CREATE USER 'briean'@'%' IDENTIFIED BY 'briean';
-grant all on *.* to 'briean';
+CREATE USER 'modulo'@'%' IDENTIFIED BY 'modulo';
+grant all on *.* to 'modulo';
 
 ### Exit MySQL
 EXIT;
