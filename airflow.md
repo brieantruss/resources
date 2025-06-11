@@ -22,7 +22,9 @@ airflow users create \
 # Set a strong password when prompted.
 
 ## Activate virtual environment 
+
 cd ~/airflow/
+
 source ~/airflow/airflow_env/bin/activate
 
 
