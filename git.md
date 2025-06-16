@@ -59,7 +59,8 @@ git add .                  # Stage all changes in the current directory
 
 ## Creating a Local Directory and Connecting to GitHub
 
-gh repo create conn_drop_inv --private --clone
+gh repo create rps --private --clone # Run in the PARENT directory of your new repo 
+gh repo create arvig-modulo/rps --private --clone # For adding to a specific organization
 cd my-project
 git add .
 git commit -m "Initial commit"
