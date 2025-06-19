@@ -20,11 +20,35 @@ cd /opt/spark/spark-3.5.5-bin-hadoop3
 
 cd /home/briean/modulo/projects/arvig
 
+## Airlfow Directory:
+
+cd ~/airflow/
+
+### Airlfow Virtual Environment Activation:
+
+source ~/airflow/airflow_env/bin/activate
+
+### Kill any Airflow processes gracefully (if running as daemons)
+pkill -f "airflow webserver" || true
+pkill -f "airflow scheduler" || true
+pkill -f "airflow celery worker" || true
+pkill -f "airflow celery flower" || true
+
+### Clean up any residual PID files (sometimes airflow processes get stuck)
+rm -f ~/airflow/airflow-webserver.pid || true
+rm -f ~/airflow/airflow-scheduler.pid || true
+rm -f ~/airflow/airflow-worker.pid || true # Worker's PID if it creates one here
+
+
 ## Health Stats Directory:
 
 cd /home/modulo/development/health_stats
 
 cd /home/briean/development/health_stats
+
+## DbVisualizer Directory:
+
+cd ~/dbvis_linux_25_1_4/opt/DbVisualizer
 
 ## Delete file contents
 
@@ -62,7 +86,7 @@ cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/dev
 
 ## Copy From One Machine to Another
 
-scp /home/briean/Downloads/health_stats-be0d582193eb723b958ff762fdaeed0700ed4e92/extract_steps.py modulo@192.168.0.110:/home/modulo/development/health_stats
+scp /home/briean/Downloads/health_stats-be0d582193eb723b958ff762fdaeed0700ed4e92.zip modulo@192.168.0.110:/home/modulo/downloads
 
 scp /home/briean/development/health_stats/transform_steps.py briean@192.168.0.245:/opt/spark/spark-3.5.5-bin-hadoop3/bin/
 
@@ -83,9 +107,6 @@ libreoffice --calc 'Steps 2025.01.25 Samsung Health.csv'
 tree cwd
 
 
-## install all requirements from requirements file
-
-pip install -r requirements.txt
 
 ## MySQL Connection Command:
 

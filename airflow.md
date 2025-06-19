@@ -37,7 +37,8 @@ airflow scheduler -D && airflow webserver -p 8081
 
 ## Start Server and run with no hangup 
 
-nohup airflow webserver -p 8082 &
+nohup airflow webserver -p 8081 &
+nohup airflow scheduler &
 
 ##
 
