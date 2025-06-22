@@ -1,16 +1,12 @@
 # Relevant Commands
 
-#### *Command Line Index:
-
-https://ss64.com/bash/
-
-## To search for files and directories in the current directory
-
-ls -a | grep "spark"
-
 ## Reference Directory:
 
 cd /home/briean/development/reference
+
+## Modulo-0 Connect:
+
+ssh modulo@192.168.0.110
 
 ## Spark Directory:
 
@@ -86,7 +82,7 @@ cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/dev
 
 ## Copy From One Machine to Another
 
-scp /home/briean/Downloads/health_stats-be0d582193eb723b958ff762fdaeed0700ed4e92.zip modulo@192.168.0.110:/home/modulo/downloads
+scp /tmp/health_stats_schema.csv briean@192.168.0.105:/home/briean/Downloads
 
 scp /home/briean/development/health_stats/transform_steps.py briean@192.168.0.245:/opt/spark/spark-3.5.5-bin-hadoop3/bin/
 
@@ -170,6 +166,31 @@ git commit -m "Your commit message"  # Commit staged changes with a message
 git push                   # Push committed changes to the remote repository
 
 
+# MySQL
 
+## Displaying database size
+SELECT
+    table_schema AS "Database",
+    SUM(data_length + index_length) / 1024 / 1024 AS "Size in MB"
+FROM
+    information_schema.tables
+GROUP BY
+    table_schema;
 
+## selecting into a csv
 
+SELECT *
+FROM infomration_schema.columns
+WHERE table_schema = 'health_stats'
+INTO OUTFILE '~/development/health_stats/schema.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
+#### *Command Line Index:
+
+https://ss64.com/bash/
+
+## To search for files and directories in the current directory
+
+ls -a | grep "spark"
