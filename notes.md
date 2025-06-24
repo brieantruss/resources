@@ -35,6 +35,26 @@ rm -f ~/airflow/airflow-webserver.pid || true
 rm -f ~/airflow/airflow-scheduler.pid || true
 rm -f ~/airflow/airflow-worker.pid || true # Worker's PID if it creates one here
 
+## Run Flask App
+
+cd /home/modulo/fitness_api
+
+nohup /home/modulo/fitness_api/fitness_api/bin/python /home/modulo/fitness_api/api_app.py > flask_api_nohup.log 2>&1 &
+
+### Cosing
+
+pkill -f
+
+## Run Streamlit App
+
+cd /home/modulo/fitness_streamlit_app
+
+nohup /home/modulo/fitness_streamlit_app/fitness_streamlit_app/bin/streamlit run /home/modulo/fitness_streamlit_app/streamlit_app.py --server.port 8501 --server.enableCORS false --server.enableXsrfProtection false > streamlit_nohup.log 2>&1 &
+
+### Closing:
+
+ps aux | grep streamlit_app.py
+
 
 ## Health Stats Directory:
 
@@ -164,6 +184,21 @@ git pull                   # Fetch and merge changes from the remote repository
 git add .                  # Stage all changes in the current directory
 git commit -m "Your commit message"  # Commit staged changes with a message
 git push                   # Push committed changes to the remote repository
+
+
+## Setting Git Credentials w SSH
+
+### Generate an SSH Key Pair: If you don't have one, generate it:
+
+ssh-keygen -t ed25519 -C "btruss@moduloinsights.com"
+
+Add your SSH Public Key to GitHub:
+Copy your public key (usually ~/.ssh/id_ed25519.pub or ~/.ssh/id_rsa.pub). You can view it with cat ~/.ssh/id_ed25519.pub.
+Go to your GitHub settings (Settings -> SSH and GPG keys -> New SSH key).
+Paste your public key there and give it a title.
+
+### Change your Git Remote URL to use SSH
+git remote set-url origin git@github.com:btruss13/airflow.git
 
 
 # MySQL

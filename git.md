@@ -35,7 +35,7 @@ git merge <branch_name>    # Merge a branch into the current branch
 
 git log                    # View commit history
 git reset --hard HEAD       # Discard all changes in the working directory
-git checkout -- <file>     # Discard changes to a specific file
+git checkout -- <file>     # Discarsd changes to a specific file
 git stash                  # Temporarily save changes that aren't ready to be committed
 git stash pop              # Restore stashed changes
 
@@ -87,3 +87,33 @@ git push origin --delete <your-feature-branch-name>
 ## Get an updated file from the remote repo
 git checkout <file_name>
 git pull
+
+
+
+## Create a Repo from an existing directory
+
+git init
+
+git add .
+
+git commit -m "Initial commit of fitness_api project"
+
+gh repo create fitness_api --private --source=. --remote=origin --push
+
+
+## gh auth login
+
+gh auth login
+
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations on this host? SSH
+? Upload your SSH public key to your GitHub account? /home/modulo/.ssh/id_ed25519.pub
+? Title for your SSH key: modulo-0
+? How would you like to authenticate GitHub CLI? Paste an authentication token
+Tip: you can generate a Personal Access Token here https://github.com/settings/tokens
+The minimum required scopes are 'repo', 'read:org', 'admin:public_key'.
+? Paste your authentication token: *********************************************************************************************
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+HTTP 403: Resource not accessible by personal access token (https://api.github.com/user/keys?per_page=100)
