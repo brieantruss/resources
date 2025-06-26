@@ -43,7 +43,7 @@ nohup /home/modulo/fitness_api/fitness_api/bin/python /home/modulo/fitness_api/a
 
 ### Cosing
 
-pkill -f
+pkill -f 
 
 ## Run Streamlit App
 
@@ -222,9 +222,11 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
 
+
 #### *Command Line Index:
 
 https://ss64.com/bash/
+
 
 ## To search for files and directories in the current directory
 
