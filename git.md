@@ -100,6 +100,7 @@ git commit -m "Initial commit of fitness_api project"
 
 gh repo create fitness_api --private --source=. --remote=origin --push
 
+gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
 
 ## gh auth login
 
