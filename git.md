@@ -96,9 +96,9 @@ git init
 
 git add .
 
-git commit -m "Initial commit of fitness_api project"
+git commit -m "Initial commit of health stats"
 
-gh repo create fitness_api --private --source=. --remote=origin --push
+gh repo create health_stats_backups --private --source=. --remote=origin --push
 
 gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
 
