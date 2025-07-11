@@ -16,6 +16,18 @@ cd /opt/spark/spark-3.5.5-bin-hadoop3
 
 cd /home/briean/modulo/projects/arvig
 
+## Health Stats Directory:
+
+cd /home/modulo/development/health_stats
+
+cd /home/briean/development/health_stats
+
+## DbVisualizer Directory:
+
+cd ~/dbvis_linux_25_1_4/opt/DbVisualizer
+
+./dbvis
+
 # Airflow
 
 ## Airlfow Directory:
@@ -43,9 +55,11 @@ cd /home/modulo/fitness_api
 
 nohup /home/modulo/fitness_api/fitness_api/bin/python /home/modulo/fitness_api/api_app.py > flask_api_nohup.log 2>&1 &
 
-### Cosing
+### Closing
 
-pkill -f 
+ps aux | grep api_app.py
+
+kill 
 
 ## Run Streamlit App
 
@@ -57,6 +71,7 @@ nohup /home/modulo/fitness_streamlit_app/fitness_streamlit_app/bin/streamlit run
 
 ps aux | grep streamlit_app.py
 
+kill 
 
 ## Health Stats Directory:
 
@@ -67,6 +82,8 @@ cd /home/briean/development/health_stats
 ## DbVisualizer Directory:
 
 cd ~/dbvis_linux_25_1_4/opt/DbVisualizer
+
+./dbvis
 
 ## Delete file contents
 
@@ -132,7 +149,13 @@ sudo mysql -u root -p
 
 ## Crontab:
 
-crontab -e
+### Open Crontab
+
+sudo crontab -e
+
+### Schedule a script (Below is for daily at 3am)
+
+0 3 * * * /home/modulo/development/health_stats/backups/health_stats_mysql_backup.py >> /var/log/mysql_backup_python.log 2>&1
 
 ## RClone Mount:
 
