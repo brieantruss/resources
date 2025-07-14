@@ -38,6 +38,8 @@ cd ~/airflow/
 
 source ~/airflow/airflow_env/bin/activate
 
+### Starting Airflow
+
 ### Kill any Airflow processes gracefully (if running as daemons)
 pkill -f "airflow webserver" || true
 pkill -f "airflow scheduler" || true
