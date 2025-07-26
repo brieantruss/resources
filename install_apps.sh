@@ -83,7 +83,7 @@ else
         rm "$DBVIS_DEB_FILE" || echo "Failed to install DBVisualizer. Check the download URL and dependencies."
     else
         echo "Skipping DBVisualizer installation."
-    fi
+    LFI
 fi
 
 # --- Install Zoom ---
@@ -165,6 +165,19 @@ else
     fi
 fi
 
+# --- Install Bitwarden ---
+print_header "Installing Bitwarden"
+# Bitwarden is available as a Snap package.
+if command_exists bitwarden; then
+    echo "Bitwarden is already installed."
+else
+    if confirm_action "Install Bitwarden via Snap?"; then
+        sudo snap install bitwarden || echo "Failed to install Bitwarden."
+    else
+        echo "Skipping Bitwarden installation."
+    fi
+fi
+
 # --- Final Cleanup ---
 print_header "Cleaning up"
 sudo apt autoremove -y
@@ -176,4 +189,3 @@ echo "Installation script finished."
 echo "Please remember to manually configure applications and check for updates."
 echo "For DBVisualizer and Zoom, ensure you downloaded the correct and latest .deb files."
 echo "----------------------------------------------------"
-
