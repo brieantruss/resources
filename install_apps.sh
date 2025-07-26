@@ -83,7 +83,7 @@ else
         rm "$DBVIS_DEB_FILE" || echo "Failed to install DBVisualizer. Check the download URL and dependencies."
     else
         echo "Skipping DBVisualizer installation."
-    LFI
+    fi
 fi
 
 # --- Install Zoom ---
