@@ -9,7 +9,6 @@
 AUTO_CONFIRM=false
 
 # --- Functions ---
-
 # Function to check if a command exists
 command_exists () {
     type "$1" &> /dev/null ;
@@ -37,7 +36,6 @@ print_header() {
 }
 
 # --- Script Start ---
-
 echo "Starting Ubuntu Desktop 24.04 LTS Program Installation Script..."
 echo "This script requires sudo privileges for many operations."
 echo "You may be prompted for your password multiple times."
@@ -106,7 +104,7 @@ else
         rm "$ZOOM_DEB_FILE" || echo "Failed to install Zoom. Check the download URL and dependencies."
     else
         echo "Skipping Zoom installation."
-    fi
+    Ffi
 fi
 
 # --- Install TickTick ---
@@ -152,6 +150,23 @@ else
     fi
 fi
 
+# --- Install GitHub CLI (gh) ---
+print_header "Installing GitHub CLI (gh)"
+if command_exists gh; then
+    echo "GitHub CLI (gh) is already installed."
+else
+    if confirm_action "Install GitHub CLI (gh)?"; then
+        echo "Adding GitHub CLI repository..."
+        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+        sudo apt update -y && \
+        sudo apt install gh -y || echo "Failed to install GitHub CLI (gh)."
+    else
+        echo "Skipping GitHub CLI (gh) installation."
+    fi
+fi
+
 # --- Install Flameshot ---
 print_header "Installing Flameshot"
 # Flameshot is also usually in the default Ubuntu repositories.
@@ -178,14 +193,51 @@ else
     fi
 fi
 
-# --- Final Cleanup ---
-print_header "Cleaning up"
-sudo apt autoremove -y
-sudo apt clean
+# --- Install VirtualBox ---
+print_header "Installing VirtualBox"
+if command_exists virtualbox; then
+    echo "VirtualBox is already installed."
+else
+    if confirm_action "Install VirtualBox?"; then
+        echo "Adding VirtualBox repository..."
+        # Install prerequisite packages
+        sudo apt install -y curl wget gnupg2 lsb-release || echo "Failed to install VirtualBox prerequisites."
 
-echo ""
-echo "----------------------------------------------------"
-echo "Installation script finished."
-echo "Please remember to manually configure applications and check for updates."
-echo "For DBVisualizer and Zoom, ensure you downloaded the correct and latest .deb files."
-echo "----------------------------------------------------"
+        # Import Oracle public keys
+        curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/vbox.gpg && \
+        curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg || echo "Failed to import VirtualBox GPG keys."
+
+        # Add VirtualBox repository for Ubuntu 24.04 (Noble Numbat)
+        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/vbox.gpg] http://download.virtualbox.org/virtualbox/debian noble contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list > /dev/null && \
+        sudo apt update -y && \
+        # Install VirtualBox 7.0, its Qt GUI, and necessary headers/dkms
+        sudo apt install -y virtualbox-7.0 virtualbox-qt linux-headers-$(uname -r) dkms || echo "Failed to install VirtualBox."
+
+        # Add current user to vboxusers group
+        echo "Adding your user to the 'vboxusers' group. You may need to log out and back in for changes to take effect."
+        sudo usermod -aG vboxusers "$USER" || echo "Failed to add user to vboxusers group."
+        
+        # Ensure kernel modules are configured
+        sudo /sbin/vboxconfig || echo "Failed to configure VirtualBox kernel modules. Manual intervention might be required."
+    else
+        echo "Skipping VirtualBox installation."
+    fi
+fi
+
+---
+### Install Net-tools
+
+This section will add the installation of `net-tools`, which provides essential networking utilities like `ifconfig`, `netstat`, and `route`.
+
+```bash
+# --- Install Net-tools ---
+print_header "Installing Net-tools"
+if command_exists ifconfig; then # Check for a common net-tools command
+    echo "Net-tools is already installed."
+else
+    if confirm_action "Install Net-tools?"; then
+        sudo apt install net-tools -y || echo "Failed to install Net-tools."
+    else
+        echo "Skipping Net-tools installation."
+    fi
+fi
