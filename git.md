@@ -96,9 +96,9 @@ git init
 
 git add .
 
-git commit -m "Initial commit of health stats"
+git commit -m "Initial commit of modulo crontab backup"
 
-gh repo create airflow --private --source=. --remote=origin --push
+gh repo create modcron --private --source=. --remote=origin --push
 
 gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
 
