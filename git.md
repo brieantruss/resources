@@ -98,11 +98,11 @@ git add .
 
 git commit -m "Initial commit of health stats"
 
-gh repo create health_stats_backups --private --source=. --remote=origin --push
+gh repo create airflow --private --source=. --remote=origin --push
 
 gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
 
-## gh auth login
+## gh auth login to store credentials automatically 
 
 gh auth login
 
