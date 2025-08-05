@@ -107,12 +107,18 @@ gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
 gh auth login
 
 ? What account do you want to log into? GitHub.com
+
 ? What is your preferred protocol for Git operations on this host? SSH
+
 ? Upload your SSH public key to your GitHub account? /home/modulo/.ssh/id_ed25519.pub
+
 ? Title for your SSH key: modulo-0
+
 ? How would you like to authenticate GitHub CLI? Paste an authentication token
+
 Tip: you can generate a Personal Access Token here https://github.com/settings/tokens
 The minimum required scopes are 'repo', 'read:org', 'admin:public_key'.
+
 ? Paste your authentication token: *********************************************************************************************
 - gh config set -h github.com git_protocol ssh
 ✓ Configured git protocol
