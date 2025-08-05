@@ -104,7 +104,7 @@ else
         rm "$ZOOM_DEB_FILE" || echo "Failed to install Zoom. Check the download URL and dependencies."
     else
         echo "Skipping Zoom installation."
-    Ffi
+    fi
 fi
 
 # --- Install TickTick ---
@@ -193,43 +193,53 @@ else
     fi
 fi
 
-# --- Install VirtualBox ---
+# --- Install VirtualBox (Apt method for Noble - most reliable) ---
 print_header "Installing VirtualBox"
 if command_exists virtualbox; then
     echo "VirtualBox is already installed."
 else
     if confirm_action "Install VirtualBox?"; then
-        echo "Adding VirtualBox repository..."
+        echo "Adding VirtualBox repository for Ubuntu 24.04 (Noble Numbat)..."
+        
         # Install prerequisite packages
-        sudo apt install -y curl wget gnupg2 lsb-release || echo "Failed to install VirtualBox prerequisites."
+        sudo apt install -y curl wget gnupg2 lsb-release || { echo "Failed to install VirtualBox prerequisites."; exit 1; }
 
         # Import Oracle public keys
-        curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/vbox.gpg && \
-        curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg || echo "Failed to import VirtualBox GPG keys."
+        wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --output /usr/share/keyrings/oracle-virtualbox-2016.gpg || { echo "Failed to import VirtualBox 2016 GPG key."; exit 1; }
+        wget -O- https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor --output /usr/share/keyrings/oracle-virtualbox.gpg || { echo "Failed to import VirtualBox GPG key."; exit 1; }
 
-        # Add VirtualBox repository for Ubuntu 24.04 (Noble Numbat)
-        echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/vbox.gpg] http://download.virtualbox.org/virtualbox/debian noble contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list > /dev/null && \
-        sudo apt update -y && \
-        # Install VirtualBox 7.0, its Qt GUI, and necessary headers/dkms
-        sudo apt install -y virtualbox-7.0 virtualbox-qt linux-headers-$(uname -r) dkms || echo "Failed to install VirtualBox."
-
-        # Add current user to vboxusers group
-        echo "Adding your user to the 'vboxusers' group. You may need to log out and back in for changes to take effect."
-        sudo usermod -aG vboxusers "$USER" || echo "Failed to add user to vboxusers group."
+        # Add VirtualBox repository for Noble
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] http://download.virtualbox.org/virtualbox/debian noble contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list > /dev/null && \
         
-        # Ensure kernel modules are configured
-        sudo /sbin/vboxconfig || echo "Failed to configure VirtualBox kernel modules. Manual intervention might be required."
+        sudo apt update -y && \
+        
+        # Attempt to install VirtualBox with its dependencies
+        sudo apt install -y virtualbox-7.0 || {
+            echo "Failed to install virtualbox-7.0. This might be a dependency issue."
+            echo "Attempting to install a common missing dependency (libvpx8) from the main noble repository."
+            # A common dependency problem is libvpx7, but the noble repo provides libvpx8 which is a good substitute.
+            sudo apt install -y libvpx8 || echo "Failed to install libvpx8. Manual intervention required."
+            
+            # Now try installing VirtualBox again
+            sudo apt install -y virtualbox-7.0 || echo "Failed to install VirtualBox even after fixing dependencies. Please check the log for details."
+        }
+
+        # Check if VirtualBox was installed before trying to add user
+        if command_exists virtualbox; then
+            # Add current user to vboxusers group
+            echo "Adding your user to the 'vboxusers' group. You may need to log out and back in for changes to take effect."
+            sudo usermod -aG vboxusers "$USER" || echo "Failed to add user to vboxusers group."
+            
+            # Ensure kernel modules are configured
+            sudo /sbin/vboxconfig || echo "Failed to configure VirtualBox kernel modules. Manual intervention might be required."
+        else
+            echo "VirtualBox installation failed, skipping post-installation steps."
+        fi
     else
         echo "Skipping VirtualBox installation."
     fi
 fi
 
----
-### Install Net-tools
-
-This section will add the installation of `net-tools`, which provides essential networking utilities like `ifconfig`, `netstat`, and `route`.
-
-```bash
 # --- Install Net-tools ---
 print_header "Installing Net-tools"
 if command_exists ifconfig; then # Check for a common net-tools command
@@ -241,3 +251,6 @@ else
         echo "Skipping Net-tools installation."
     fi
 fi
+
+echo ""
+echo "Installation script finished."
