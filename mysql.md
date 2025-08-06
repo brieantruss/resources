@@ -60,7 +60,7 @@ SELECT
 FROM
     INFORMATION_SCHEMA.COLUMNS
 WHERE
-    TABLE_SCHEMA = 'your_database_name' -- Replace with your actual database name
+    TABLE_SCHEMA = 'health_stats' -- Replace with your actual database name
 ORDER BY
     TABLE_SCHEMA,
     TABLE_NAME,
