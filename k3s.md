@@ -27,7 +27,7 @@ Bash
 
 curl -sfL https://get.k3s.io | K3S_URL=https://modulo-0:6443 K3S_TOKEN=<NEW_NODE_TOKEN> sh -
 
-# Commands
+# Commands (on master)
 
 sudo kubectl apply -f /home/modulo/k3s-manifests/
 sudo kubectl get deployments
@@ -35,7 +35,7 @@ sudo kubectl get services
 sudo kubectl get pods
 
 
-Flush ip tables
+Flush ip tables (all nodes)
 
 sudo iptables -F
 sudo iptables -X
