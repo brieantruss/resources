@@ -50,6 +50,13 @@ sudo iptables -P OUTPUT ACCEPT
 
 Prometheus and Grafana Install (on master node)
 
+# Install
+ 
  2126  sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml helm install prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring --create-namespace --set grafana.service.type=NodePort
+
+# Get NodePort port #
+
  2127  sudo kubectl get service prometheus-stack-grafana -n monitoring
+ 
+ # Get password
  2128  sudo kubectl get secret prometheus-stack-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
