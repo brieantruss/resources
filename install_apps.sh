@@ -45,6 +45,18 @@ print_header "Updating System Package Lists"
 sudo apt update -y || { echo "Failed to update package lists. Exiting."; exit 1; }
 sudo apt upgrade -y || { echo "Failed to upgrade packages. Continuing..."; }
 
+# --- Install Python 3.12 ---
+print_header "Installing Python 3.12"
+if command_exists python3.12; then
+    echo "Python 3.12 is already installed."
+else
+    if confirm_action "Install Python 3.12?"; then
+        sudo apt install python3.12 -y || echo "Failed to install Python 3.12."
+    else
+        echo "Skipping Python 3.12 installation."
+    fi
+fi
+
 # --- Install VS Code ---
 print_header "Installing Visual Studio Code"
 # VS Code is easily installed via Snap, which keeps it updated automatically.
