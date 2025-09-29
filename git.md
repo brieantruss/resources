@@ -96,11 +96,11 @@ git init
 
 git add .
 
-git commit -m "Initial commit of modulo crontab backup"
+git commit -m "Initial commit"
 
 gh repo create modcron --private --source=. --remote=origin --push
 
-gh repo create arvig-modulo/cap_dash --private --source=. --remote=origin --push
+gh repo create arvig-modulo/scheduled_reports --private --source=. --remote=origin --push
 
 ## gh auth login to store credentials automatically 
 
