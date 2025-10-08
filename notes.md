@@ -260,3 +260,44 @@ https://ss64.com/bash/
 ## To search for files and directories in the current directory
 
 ls -a | grep "spark"
+
+
+## List running services
+
+systemctl list-units --type=service --state=running
+
+
+## Stop a service	
+
+sudo systemctl stop <service-name>	
+
+Stops a currently running service.
+
+## Start a service	
+
+
+## sudo systemctl start <service-name>	sudo systemctl start nginx	Starts a service that is 
+currently 
+stopped.
+
+## Restart a service	
+
+sudo systemctl restart <service-name>	
+
+Stops the service and then 
+starts it again. This is common after editing a configuration file.
+
+## Reload a service	
+
+sudo systemctl reload <service-name>
+
+Tells the service to re-read 
+its configuration files without stopping the main process. If the service doesn't support a 
+reload, the command will fail or a full restart may be required.
+
+## Reload or Restart	
+
+sudo systemctl reload-or-restart <service-name>	s
+
+Attempts a 
+graceful reload. If a reload is not supported, it performs a full restart.
