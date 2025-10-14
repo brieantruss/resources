@@ -64,4 +64,8 @@ WHERE
 ORDER BY
     TABLE_SCHEMA,
     TABLE_NAME,
-    ORDINAL_POSITION;
+    ORDINAL_POSITION
+INTO OUTFILE '/home/modulo/health_stats_schema.csv'  -- Specify the file path on the server
+FIELDS TERMINATED BY ','                -- Use a comma as the separator
+ENCLOSED BY '"'                         -- Enclose fields in double quotes
+LINES TERMINATED BY '\n';               -- Use a newline character for line breaks;s

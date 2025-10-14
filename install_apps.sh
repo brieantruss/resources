@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 
 # This script automates the installation of common applications on Ubuntu Desktop 24.04 LTS.
 # It uses a combination of apt (package manager) and snap (universal packaging system).
@@ -205,50 +205,51 @@ else
     fi
 fi
 
-# --- Install VirtualBox (Apt method for Noble - most reliable) ---
-print_header "Installing VirtualBox"
-if command_exists virtualbox; then
-    echo "VirtualBox is already installed."
+# ---------------------------------------------------------------------
+# --- Install QEMU/KVM with Virt-Manager (Replacing VirtualBox) ---
+# ---------------------------------------------------------------------
+print_header "Installing QEMU/KVM and Virt-Manager"
+if command_exists virt-manager; then
+    echo "Virt-Manager and QEMU/KVM appear to be installed."
 else
-    if confirm_action "Install VirtualBox?"; then
-        echo "Adding VirtualBox repository for Ubuntu 24.04 (Noble Numbat)..."
+    if confirm_action "Install QEMU/KVM and Virt-Manager (recommended virtualization stack)?"; then
+        echo "Installing qemu-kvm, libvirt-daemon-system, and virt-manager..."
         
-        # Install prerequisite packages
-        sudo apt install -y curl wget gnupg2 lsb-release || { echo "Failed to install VirtualBox prerequisites."; exit 1; }
-
-        # Import Oracle public keys
-        wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --output /usr/share/keyrings/oracle-virtualbox-2016.gpg || { echo "Failed to import VirtualBox 2016 GPG key."; exit 1; }
-        wget -O- https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor --output /usr/share/keyrings/oracle-virtualbox.gpg || { echo "Failed to import VirtualBox GPG key."; exit 1; }
-
-        # Add VirtualBox repository for Noble
-        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] http://download.virtualbox.org/virtualbox/debian noble contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list > /dev/null && \
-        
-        sudo apt update -y && \
-        
-        # Attempt to install VirtualBox with its dependencies
-        sudo apt install -y virtualbox-7.0 || {
-            echo "Failed to install virtualbox-7.0. This might be a dependency issue."
-            echo "Attempting to install a common missing dependency (libvpx8) from the main noble repository."
-            # A common dependency problem is libvpx7, but the noble repo provides libvpx8 which is a good substitute.
-            sudo apt install -y libvpx8 || echo "Failed to install libvpx8. Manual intervention required."
-            
-            # Now try installing VirtualBox again
-            sudo apt install -y virtualbox-7.0 || echo "Failed to install VirtualBox even after fixing dependencies. Please check the log for details."
+        # Install the main packages
+        sudo apt install -y qemu-kvm libvirt-daemon-system virt-manager bridge-utils || { 
+            echo "Failed to install core KVM packages. Exiting KVM installation section."
+            exit 1
         }
 
-        # Check if VirtualBox was installed before trying to add user
-        if command_exists virtualbox; then
-            # Add current user to vboxusers group
-            echo "Adding your user to the 'vboxusers' group. You may need to log out and back in for changes to take effect."
-            sudo usermod -aG vboxusers "$USER" || echo "Failed to add user to vboxusers group."
+        # Check for KVM installation success before proceeding
+        if command_exists virt-manager; then
+            echo "KVM packages installed successfully."
+
+            # Start and enable the libvirt service
+            echo "Enabling and starting libvirt service..."
+            sudo systemctl enable --now libvirtd || echo "Failed to enable and start libvirtd service."
+
+            # Add current user to the 'libvirt' group
+            echo "Adding your user to the 'libvirt' group for non-root management. ⚠️ You MUST **log out and log back in** for this change to take effect."
+            sudo usermod -aG libvirt "$USER" || echo "Failed to add user to libvirt group."
             
-            # Ensure kernel modules are configured
-            sudo /sbin/vboxconfig || echo "Failed to configure VirtualBox kernel modules. Manual intervention might be required."
+            # Verify KVM support (optional but helpful)
+            if grep -E 'vmx|svm' /proc/cpuinfo &> /dev/null; then
+                echo "KVM hardware virtualization support (VMX/SVM) is available on your CPU."
+            else
+                echo "⚠️ KVM hardware virtualization support (VMX/SVM) may be disabled or unavailable. Check your BIOS settings."
+            fi
+
+            # Check if user is in the group (will only work immediately after 'usermod -aG' if current shell is in the group list)
+            if groups "$USER" | grep -q libvirt; then
+                echo "User '$USER' is now a member of the 'libvirt' group (requires re-login)."
+            fi
+
         else
-            echo "VirtualBox installation failed, skipping post-installation steps."
+            echo "Virt-Manager installation failed, skipping post-installation steps."
         fi
     else
-        echo "Skipping VirtualBox installation."
+        echo "Skipping QEMU/KVM and Virt-Manager installation."
     fi
 fi
 
@@ -266,3 +267,8 @@ fi
 
 echo ""
 echo "Installation script finished."
+echo "----------------------------------------------------------------------"
+echo "⚠️ IMPORTANT: If you installed QEMU/KVM, you **MUST log out and log back in**"
+echo "for the user group changes (libvirt) to take effect, which is necessary"
+echo "to run Virt-Manager without root privileges."
+echo "----------------------------------------------------------------------"
