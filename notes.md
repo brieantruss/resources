@@ -95,11 +95,11 @@ cd ~/dbvis_linux_25_1_4/opt/DbVisualizer
 
 ## Creation
 
-python3 -m venv .health_stats
+python3 -m venv .venv
 
 ## Activation
 
-source .health_stats/bin/activate
+source .venv/bin/activate
 
 ## Deactivation
 
@@ -123,11 +123,16 @@ cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/dev
 
 ## Copy From One Machine to Another
 
-scp /tmp/health_stats_schema.csv briean@192.168.0.105:/home/briean/Downloads
+scp /home/briean/Downloads/'Finances  - Balance Sheet.csv' modulo@192.168.0.110:/home/modulo/finances/
 
-scp /tmp/health_stats_columns.csv briean@192.168.0.105:/home/briean/Downloads
+scp /home/briean/Downloads/'Finances  - Budget.csv' modulo@192.168.0.110:/home/modulo/finances/
 
-scp /home/briean/development/health_stats/transform_steps.py briean@192.168.0.245:/opt/spark/spark-3.5.5-bin-hadoop3/bin/
+scp /home/briean/Downloads/'Finances  - Income Statement.csv' modulo@192.168.0.110:/home/modulo/finances/
+
+scp /home/briean/Downloads/'Finances  - Transactions.csv' modulo@192.168.0.110:/home/modulo/finances/
+
+scp /home/briean/load_budget.sql modulo@192.168.0.110:/home/modulo/finances/
+
 
 ## Submit a Spark Job
 
