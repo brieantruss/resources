@@ -311,3 +311,8 @@ graceful reload. If a reload is not supported, it performs a full restart.
 # Check disk space usage and free space
 
 df -h
+
+
+# Installing a .deb file
+
+sudo apt install ./file_name.deb
