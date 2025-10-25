@@ -41,3 +41,25 @@ StandardError=journal
 WantedBy=multi-user.target
 
 
+# /etc/systemd/system/finances_trigger.service
+[Unit]
+Description=Finances Google Sheet Trigger Server
+After=network.target
+
+[Service]
+# 💡 CRITICAL: User under which the service runs. Use the user that owns the files.
+User=modulo
+WorkingDirectory=/home/modulo/finances
+
+# 💡 CRITICAL: The full path to the Python executable INSIDE your venv.
+# This ensures all dependencies (Flask, pandas) are found.
+ExecStart=/home/modulo/finances/.venv/bin/python3 pi_server.py
+
+Restart=always
+
+# Standard output/error redirected to systemd journal
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
