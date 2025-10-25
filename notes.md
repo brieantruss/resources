@@ -123,7 +123,7 @@ cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/dev
 
 ## Copy From One Machine to Another
 
-scp /home/briean/Downloads/'Finances  - Balance Sheet.csv' modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/Downloads/'Finances - Master.xlsx' modulo@192.168.0.110:/home/modulo/finances/
 
 scp /home/briean/Downloads/'Finances  - Budget.csv' modulo@192.168.0.110:/home/modulo/finances/
 
@@ -306,3 +306,8 @@ sudo systemctl reload-or-restart <service-name>	s
 
 Attempts a 
 graceful reload. If a reload is not supported, it performs a full restart.
+
+
+# Check disk space usage and free space
+
+df -h
