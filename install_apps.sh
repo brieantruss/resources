@@ -1,4 +1,4 @@
-    #!/bin/bash
+#!/bin/bash
 
 # This script automates the installation of common applications on Ubuntu Desktop 24.04 LTS.
 # It uses a combination of apt (package manager) and snap (universal packaging system).
@@ -202,6 +202,20 @@ else
         sudo snap install bitwarden || echo "Failed to install Bitwarden."
     else
         echo "Skipping Bitwarden installation."
+    fi
+fi
+
+# --- Install Slack ---
+print_header "Installing Slack"
+# Slack is available as a Snap package.
+if command_exists slack; then
+    echo "Slack is already installed."
+else
+    if confirm_action "Install Slack via Snap?"; then
+        # The official Slack app requires the '--classic' confinement
+        sudo snap install slack --classic || echo "Failed to install Slack."
+    else
+        echo "Skipping Slack installation."
     fi
 fi
 
