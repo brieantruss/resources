@@ -316,3 +316,7 @@ df -h
 # Installing a .deb file
 
 sudo apt install ./file_name.deb
+
+# Operating system details
+
+cat /etc/os-release

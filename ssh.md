@@ -19,7 +19,7 @@ ssh-keygen -t rsa -b 4096
 ssh-copy-id modulo@192.168.0.110
 ssh-copy-id modulo@192.168.0.111 # one remote
 ssh-copy-id modulo@192.168.0.112 && ssh-copy-id modulo@192.168.0.113 # two remotes
-ssh-copy-id modulo@192.168.0.111 && ssh-copy-id modulo@192.168.0.112 && ssh-copy-id modulo@192.168.0.113
+ssh-copy-id modulo@192.168.0.110 && ssh-copy-id modulo@192.168.0.111 && ssh-copy-id modulo@192.168.0.112 && ssh-copy-id modulo@192.168.0.113
 
 
 ## Privilege Escalation:

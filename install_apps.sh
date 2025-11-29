@@ -57,6 +57,19 @@ else
     fi
 fi
 
+# --- Install Python VENV ---
+# Add VENV package for Python 3.12 environments
+print_header "Installing Python 3.12 VENV"
+if dpkg -l | grep -q python3.12-venv; then
+    echo "Python 3.12 VENV is already installed."
+else
+    if confirm_action "Install Python 3.12 VENV?"; then
+        sudo apt install python3.12-venv -y || echo "Failed to install Python 3.12 VENV."
+    else
+        echo "Skipping Python 3.12 VENV installation."
+    fi
+fi
+
 # --- Install VS Code ---
 print_header "Installing Visual Studio Code"
 # VS Code is easily installed via Snap, which keeps it updated automatically.
@@ -162,6 +175,21 @@ else
     fi
 fi
 
+# --- Git Global Configuration ---
+print_header "Git Global Configuration"
+if command_exists git; then
+    if confirm_action "Set global Git user email (btruss@moduloinsights.com) and name (Briean Truss)?"; then
+        echo "Setting global user.email..."
+        git config --global user.email "btruss@moduloinsights.com" || echo "Failed to set user.email."
+        echo "Setting global user.name..."
+        git config --global user.name "Briean Truss" || echo "Failed to set user.name."
+    else
+        echo "Skipping Git global configuration."
+    fi
+else
+    echo "Git is not installed, skipping global configuration."
+fi
+
 # --- Install GitHub CLI (gh) ---
 print_header "Installing GitHub CLI (gh)"
 if command_exists gh; then
@@ -176,6 +204,59 @@ else
         sudo apt install gh -y || echo "Failed to install GitHub CLI (gh)."
     else
         echo "Skipping GitHub CLI (gh) installation."
+    fi
+fi
+
+# ---------------------------------------------------------------------
+# --- Configure SSH, GitHub CLI, and Clone Reference Repo ---
+# ---------------------------------------------------------------------
+print_header "Configuring SSH, GitHub CLI, and Cloning Reference Repo"
+
+# 1. Install and Enable OpenSSH Server
+if ! command_exists sshd; then
+    if confirm_action "Install and enable OpenSSH Server?"; then
+        echo "Installing openssh-server..."
+        sudo apt install openssh-server -y || echo "Failed to install openssh-server."
+        echo "Enabling and starting SSH service..."
+        sudo systemctl enable --now ssh || echo "Failed to enable/start ssh service."
+    else
+        echo "Skipping OpenSSH Server installation."
+    fi
+fi
+
+# 2. Configure GitHub CLI (gh) for SSH
+# NOTE: gh command existence is checked in the previous section.
+if command_exists gh; then
+    if confirm_action "Configure GitHub CLI (gh) to use SSH protocol?"; then
+        echo "Starting gh auth login process. Please follow the prompts (select SSH as protocol)."
+        gh auth login # Requires user interaction
+        
+        # Set Git protocol to SSH for GitHub
+        if [ $? -eq 0 ]; then
+            echo "Setting git_protocol to ssh for github.com."
+            gh config set -h github.com git_protocol ssh || echo "Failed to set gh git_protocol."
+        else
+            echo "GitHub CLI login failed or was cancelled, skipping protocol configuration."
+        fi
+    else
+        echo "Skipping GitHub CLI SSH configuration."
+    fi
+else
+    echo "GitHub CLI (gh) is not installed, skipping configuration."
+fi
+
+# 3. Clone Reference Documentation
+REFERENCE_REPO="https://github.com/btruss13/reference"
+REFERENCE_DIR="$HOME/reference"
+
+if [ -d "$REFERENCE_DIR" ]; then
+    echo "Reference repository already exists at $REFERENCE_DIR."
+else
+    if confirm_action "Clone reference repository ($REFERENCE_REPO) to $REFERENCE_DIR?"; then
+        # Ensure we are in the home directory before cloning
+        (cd "$HOME" && git clone "$REFERENCE_REPO" || echo "Failed to clone reference repository.")
+    else
+        echo "Skipping reference repository clone."
     fi
 fi
 
@@ -267,6 +348,28 @@ else
     fi
 fi
 
+# --- LibreOffice Management ---
+print_header "LibreOffice Management"
+
+# 1. Remove pre-installed (older) LibreOffice packages
+if confirm_action "Remove pre-installed LibreOffice packages to install the latest version?"; then
+    echo "Removing default LibreOffice packages..."
+    sudo apt remove --purge libreoffice* -y || echo "Failed to purge existing LibreOffice packages."
+else
+    echo "Skipping removal of default LibreOffice packages."
+fi
+
+# 2. Add PPA and install the latest LibreOffice
+if confirm_action "Add LibreOffice PPA and install the latest stable version?"; then
+    echo "Adding LibreOffice PPA..."
+    sudo add-apt-repository ppa:libreoffice/ppa -y || echo "Failed to add LibreOffice PPA."
+    
+    echo "Updating package list and installing latest LibreOffice..."
+    sudo apt update -y && sudo apt install libreoffice -y || echo "Failed to install the latest LibreOffice."
+else
+    echo "Skipping installation of the latest LibreOffice."
+fi
+
 # --- Install Net-tools ---
 print_header "Installing Net-tools"
 if command_exists ifconfig; then # Check for a common net-tools command
@@ -282,7 +385,10 @@ fi
 echo ""
 echo "Installation script finished."
 echo "----------------------------------------------------------------------"
-echo "⚠️ IMPORTANT: If you installed QEMU/KVM, you **MUST log out and log back in**"
-echo "for the user group changes (libvirt) to take effect, which is necessary"
-echo "to run Virt-Manager without root privileges."
+echo "⚠️ IMPORTANT POST-INSTALLATION STEPS:"
+echo "* If you installed **QEMU/KVM**, you **MUST log out and log back in**"
+echo "  for the user group changes (libvirt) to take effect."
+echo "* If you configured **GitHub CLI (gh)**, you will need to complete the"
+echo "  authentication process (Web browser/SSH) when prompted during the run."
+echo "* Your Git global user configuration is set: **Briean Truss <btruss@moduloinsights.com>**"
 echo "----------------------------------------------------------------------"
