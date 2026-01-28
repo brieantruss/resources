@@ -300,6 +300,19 @@ else
     fi
 fi
 
+# --- Install Xpad ---
+print_header "Installing Xpad"
+# Xpad is available in the standard Ubuntu repositories.
+if command_exists xpad; then
+    echo "Xpad is already installed."
+else
+    if confirm_action "Install Xpad (Sticky Notes)?"; then
+        sudo apt install xpad -y || echo "Failed to install Xpad."
+    else
+        echo "Skipping Xpad installation."
+    fi
+fi
+
 # ---------------------------------------------------------------------
 # --- Install QEMU/KVM with Virt-Manager (Replacing VirtualBox) ---
 # ---------------------------------------------------------------------
