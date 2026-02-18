@@ -320,3 +320,9 @@ sudo apt install ./file_name.deb
 # Operating system details
 
 cat /etc/os-release
+
+# BigQuery
+
+## Switching tabs
+
+ctrl + alt + tab
