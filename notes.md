@@ -326,3 +326,6 @@ cat /etc/os-release
 ## Switching tabs
 
 ctrl + alt + tab
+
+# Suspend Lid Hibernation
+sudo nano /etc/systemd/logind.conf0.
