@@ -341,3 +341,15 @@ print('Authenticated')
 
 ### Cell 2
 %load_ext google.colab.data_table
+
+### Running a Query (header)
+%%bigquery --project my-data-479716
+
+<
+select 
+
+field1,
+field2
+
+from table
+>
