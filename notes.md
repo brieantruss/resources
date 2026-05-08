@@ -329,3 +329,15 @@ ctrl + alt + tab
 
 # Suspend Lid Hibernation
 sudo nano /etc/systemd/logind.conf0.
+
+# Colab Notebooks
+
+## Connecting to BigQuery
+
+### Cell 1
+from google.colab import auth
+auth.authenticate_user()
+print('Authenticated')
+
+### Cell 2
+%load_ext google.colab.data_table
