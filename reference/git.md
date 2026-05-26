@@ -30,6 +30,7 @@ git branch                 # List all branches
 git branch <branch_name>   # Create a new branch
 git checkout <branch_name> # Switch to a different branch
 git merge <branch_name>    # Merge a branch into the current branch
+git branch -M main         # Rename master to main
 
 ## Other Useful Commands
 
