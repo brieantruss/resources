@@ -353,3 +353,10 @@ field2
 
 from table
 >
+
+# Setting nvidia display processor for multiple monitor setup
+sudo prime-select nvidia
+
+## Reinstall drivers
+sudo apt purge '^nvidia-.*'
+sudo ubuntu-drivers install
