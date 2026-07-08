@@ -5,6 +5,35 @@ Date: 2026-07-08
 ## Purpose
 Use one command to switch all local context between environments (account, project, ADC quota project, and git identity).
 
+## 30-Second Quick Start
+
+Run this once per new terminal:
+
+source ~/.bashrc
+
+Switch context:
+
+- use-arvig
+- use-modulo
+- use-personal
+- use-profile <name>
+
+Confirm active context:
+
+use-status
+
+Add a new client profile:
+
+use-add-client <profile_name> <gcp_account_email> <gcp_project_id_or_dash> <git_email> [git_name] [gh_username]
+
+Set your default profile (optional):
+
+export ENV_SWITCH_DEFAULT_PROFILE=arvig
+
+Reset local context (optional):
+
+use-clear
+
 ## Current One-Word Commands
 These commands are defined in ~/.bashrc:
 

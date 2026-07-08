@@ -29,7 +29,7 @@ nano duck.sh
 
 ### Paste the following content into the file. Replace YOUR_DUCKDNS_DOMAIN with the hostname you chose (e.g., myrpi5) and YOUR_DUCKDNS_TOKEN with your actual token from the DuckDNS website. 
 
-echo url="https://www.duckdns.org/update?domains=modulo-0&token=c9689d7b-bf0c-4f88-819d-938ce28b7ff2&ip=" | curl -k -o ~/duckdns/duck.log -K -
+echo url="https://www.duckdns.org/update?domains=YOUR_DUCKDNS_DOMAIN&token=YOUR_DUCKDNS_TOKEN&ip=" | curl -k -o ~/duckdns/duck.log -K -
 
 ## Make the script executable:
 
