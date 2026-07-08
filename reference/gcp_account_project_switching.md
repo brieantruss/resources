@@ -10,6 +10,16 @@ These commands are defined in ~/.bashrc:
 
 - use-arvig
 - use-modulo
+- use-personal
+- use-default
+- use-clear
+- use-status
+- use-add-client
+
+Also available:
+
+- use-profile <name>
+- use-list
 
 After opening a new terminal (or running source ~/.bashrc), run one of these and your environment is switched.
 
@@ -20,6 +30,19 @@ Each switch command sets:
 2. gcloud active project
 3. ADC quota project
 4. global git name/email
+5. attempts gh account switch if a GitHub username is configured for that profile
+
+## Quick Command Guide
+
+- use-arvig: switch to Arvig profile
+- use-modulo: switch to Modulo profile
+- use-personal: switch to personal profile
+- use-profile <name>: switch to any named profile
+- use-list: list available profile names
+- use-status: print active profile + current gcloud/git/gh context
+- use-default: switch to ENV_SWITCH_DEFAULT_PROFILE (or personal if unset)
+- use-clear: clear gcloud account/project and global git name/email
+- use-add-client: add a new profile and shorthand command permanently
 
 ## Verify After Switching
 Run these checks any time:
@@ -33,52 +56,62 @@ For Modulo verification, change project_id to my-data-479716.
 
 ## Current Function Definitions (for ~/.bashrc)
 
-_switch_env() {
-  local account="$1"
-  local project="$2"
-  local git_email="$3"
+This setup now uses named profiles.
 
-  gcloud config set account "$account" --quiet >/dev/null || return 1
-  gcloud config set project "$project" --quiet >/dev/null || return 1
+Key profile commands:
 
-  # This may fail if ADC is not initialized yet; keep going and print next step.
-  if ! gcloud auth application-default set-quota-project "$project" --quiet >/dev/null 2>&1; then
-    echo "ADC quota project not set yet. Run: gcloud auth application-default login"
-  fi
+- use-list
+- use-profile <name>
+- use-arvig
+- use-modulo
+- use-personal
+- use-default
+- use-clear
+- use-status
+- use-add-client
 
-  git config --global user.name "Briean Truss"
-  git config --global user.email "$git_email"
+## Add a New Client Profile (Recommended)
 
-  echo "Switched:"
-  echo "  account=$(gcloud config get-value account 2>/dev/null)"
-  echo "  project=$(gcloud config get-value project 2>/dev/null)"
-  echo "  git_email=$(git config --global user.email 2>/dev/null)"
-}
+Command format:
 
-use-arvig() {
-  _switch_env "briean.truss.ra@arvig.com" "arvig-report-data" "briean.truss.ra@arvig.com"
-}
+use-add-client <profile_name> <gcp_account_email> <gcp_project_id_or_dash> <git_email> [git_name] [gh_username]
 
-use-modulo() {
-  _switch_env "btruss@moduloinsights.com" "my-data-479716" "btruss@moduloinsights.com"
-}
+Notes:
 
-## Add More One-Word Commands Later
-Copy this pattern into ~/.bashrc and customize values:
-
-use-ENVNAME() {
-  _switch_env "ACCOUNT_EMAIL" "GCP_PROJECT_ID" "GIT_EMAIL"
-}
+- profile_name should be simple (letters/numbers/dash/underscore)
+- pass - for gcp_project_id_or_dash if you do not want a default project
+- this appends to ~/.bashrc so it persists across sessions
+- this also creates shorthand command use-<profile_name>
 
 Example:
 
-use-sandbox() {
-  _switch_env "you@company.com" "my-sandbox-project" "you@company.com"
-}
+use-add-client acme you@acme.com acme-prod you@acme.com "Briean Truss" acmegithub
+
+Then:
+
+source ~/.bashrc
+use-acme
+use-status
+
+## Add More Profiles Later
+Add another _env_profile_add line in ~/.bashrc:
+
+_env_profile_add "clientname" "gcp_account@company.com" "gcp-project-id" "git@email.com" "Your Name" "github_username"
 
 Then apply changes:
 
 source ~/.bashrc
+
+## Set Your Default Profile
+
+Put this in ~/.bashrc if you want a specific default:
+
+export ENV_SWITCH_DEFAULT_PROFILE=arvig
+
+Then run:
+
+source ~/.bashrc
+use-default
 
 ## First-Time Auth Notes
 If switching fails due to auth, run:
@@ -93,4 +126,18 @@ Then run your one-word switch command again.
 - gcloud account/project controls CLI context.
 - ADC controls API-client context.
 
+- gh auth context is separate; profiles attempt gh auth switch when gh username is configured.
+
 All three can differ unless switched together.
+
+## Clear vs Default
+
+- use-default: switches to ENV_SWITCH_DEFAULT_PROFILE (defaults to personal)
+- use-clear: unsets gcloud account/project and global git name/email
+
+use-clear intentionally does not revoke saved ADC credentials or log out gh sessions.
+
+Optional hard reset commands:
+
+gcloud auth application-default revoke
+gh auth logout
