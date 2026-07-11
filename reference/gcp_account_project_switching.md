@@ -15,8 +15,9 @@ Switch context:
 
 - use-arvig
 - use-modulo
-- use-personal
+- use-briean
 - use-profile <name>
+- use-profile --strict <name>
 
 Confirm active context:
 
@@ -39,7 +40,7 @@ These commands are defined in ~/.bashrc:
 
 - use-arvig
 - use-modulo
-- use-personal
+- use-briean
 - use-default
 - use-clear
 - use-status
@@ -65,13 +66,27 @@ Each switch command sets:
 
 - use-arvig: switch to Arvig profile
 - use-modulo: switch to Modulo profile
-- use-personal: switch to personal profile
+- use-briean: switch to your brieantruss profile
+- use-personal: compatibility alias for use-briean
 - use-profile <name>: switch to any named profile
+- use-profile --strict <name>: same as above, but fails if gh account switch fails
 - use-list: list available profile names
 - use-status: print active profile + current gcloud/git/gh context
-- use-default: switch to ENV_SWITCH_DEFAULT_PROFILE (or personal if unset)
+- use-default: switch to ENV_SWITCH_DEFAULT_PROFILE (or briean if unset)
 - use-clear: clear gcloud account/project and global git name/email
 - use-add-client: add a new profile and shorthand command permanently
+
+GitHub account mapping in current profiles:
+
+- use-arvig -> gh account: briean-arvig
+- use-modulo -> gh account: btruss13
+- use-briean -> gh account: brieantruss
+
+When profile switching runs, it now prints gh switch status (success or failure) so account drift is visible.
+
+Strict mode example:
+
+use-profile --strict arvig
 
 ## Verify After Switching
 Run these checks any time:
@@ -93,7 +108,7 @@ Key profile commands:
 - use-profile <name>
 - use-arvig
 - use-modulo
-- use-personal
+- use-briean
 - use-default
 - use-clear
 - use-status
@@ -161,7 +176,7 @@ All three can differ unless switched together.
 
 ## Clear vs Default
 
-- use-default: switches to ENV_SWITCH_DEFAULT_PROFILE (defaults to personal)
+- use-default: switches to ENV_SWITCH_DEFAULT_PROFILE (defaults to briean)
 - use-clear: unsets gcloud account/project and global git name/email
 
 use-clear intentionally does not revoke saved ADC credentials or log out gh sessions.

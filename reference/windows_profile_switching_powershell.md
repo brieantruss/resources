@@ -6,12 +6,14 @@ Date: 2026-07-11
 Provide the same style commands on Windows that you used on Linux:
 - use-arvig
 - use-modulo
-- use-personal
+- use-briean
 - use-list
 - use-status
 - use-default
 - use-clear
 - use-profile <name>
+- use-profile -Strict <name>
+- use-add-client
 
 ## 1) Open Your PowerShell Profile
 
@@ -33,7 +35,7 @@ $global:EnvProfiles = @{
     gcpProject    = 'arvig-report-data'
     gitName       = 'Briean Truss'
     gitEmail      = 'briean.truss.ra@arvig.com'
-    ghUser        = 'brieantruss'
+    ghUser        = 'briean-arvig'
   }
   modulo = @{
     gcloudAccount = 'btruss@moduloinsights.com'
@@ -42,12 +44,12 @@ $global:EnvProfiles = @{
     gitEmail      = 'btruss@moduloinsights.com'
     ghUser        = 'btruss13'
   }
-  personal = @{
+  briean = @{
     gcloudAccount = 'briean.j.truss@gmail.com'
     gcpProject    = ''
     gitName       = 'Briean Truss'
     gitEmail      = 'briean.j.truss@gmail.com'
-    ghUser        = 'btruss13'
+    ghUser        = 'brieantruss'
   }
 }
 
@@ -66,7 +68,10 @@ function Get-CurrentProfileName {
 }
 
 function use-profile {
-  param([Parameter(Mandatory=$true)][string]$Name)
+  param(
+    [switch]$Strict,
+    [Parameter(Mandatory=$true)][string]$Name
+  )
 
   if (-not $global:EnvProfiles.ContainsKey($Name)) {
     Write-Host "Unknown profile: $Name"
@@ -90,6 +95,12 @@ function use-profile {
 
   if ($p.ghUser) {
     gh auth switch -u $p.ghUser 2>$null | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+      Write-Host "gh account switch failed for '$($p.ghUser)'"
+      if ($Strict) {
+        throw "Strict mode enabled: aborting because gh switch failed"
+      }
+    }
   }
 
   Write-Host "Switched to profile: $Name"
@@ -112,8 +123,43 @@ function use-status {
 }
 
 function use-default {
-  $defaultProfile = if ($env:ENV_SWITCH_DEFAULT_PROFILE) { $env:ENV_SWITCH_DEFAULT_PROFILE } else { 'personal' }
+  $defaultProfile = if ($env:ENV_SWITCH_DEFAULT_PROFILE) { $env:ENV_SWITCH_DEFAULT_PROFILE } else { 'briean' }
   use-profile $defaultProfile
+}
+
+function use-add-client {
+  param(
+    [Parameter(Mandatory=$true)][string]$Name,
+    [Parameter(Mandatory=$true)][string]$GcloudAccount,
+    [Parameter(Mandatory=$true)][string]$GcpProjectOrDash,
+    [Parameter(Mandatory=$true)][string]$GitEmail,
+    [string]$GitName = 'Briean Truss',
+    [string]$GhUser = ''
+  )
+
+  if ($global:EnvProfiles.ContainsKey($Name)) {
+    Write-Host "Profile already exists: $Name"
+    return
+  }
+
+  $proj = if ($GcpProjectOrDash -eq '-') { '' } else { $GcpProjectOrDash }
+
+  $global:EnvProfiles[$Name] = @{
+    gcloudAccount = $GcloudAccount
+    gcpProject    = $proj
+    gitName       = $GitName
+    gitEmail      = $GitEmail
+    ghUser        = $GhUser
+  }
+
+  $fnName = "use-" + $Name
+  $fnBody = "param(); use-profile '$Name'"
+  Set-Item -Path ("Function:" + $fnName) -Value ([scriptblock]::Create($fnBody))
+
+  Write-Host "Added profile: $Name"
+  Write-Host "Use: use-profile $Name"
+  Write-Host "Or:  $fnName"
+  Write-Host "Note: this is session-only; add the profile block to `$PROFILE to persist."
 }
 
 function use-clear {
@@ -127,7 +173,11 @@ function use-clear {
 
 function use-arvig   { use-profile 'arvig' }
 function use-modulo  { use-profile 'modulo' }
-function use-personal { use-profile 'personal' }
+function use-briean { use-profile 'briean' }
+function use-personal { use-profile 'briean' }
+
+# Strict example:
+# use-profile -Strict arvig
 ```
 
 ## 3) Reload Profile and Verify
