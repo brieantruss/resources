@@ -15,6 +15,17 @@ Provide the same style commands on Windows that you used on Linux:
 - use-profile -Strict <name>
 - use-add-client
 
+## Required First Step (Any New Machine)
+Run authentication first:
+
+```powershell
+gcloud auth login --update-adc
+gcloud auth application-default login
+gh auth login
+```
+
+Then continue with profile setup below.
+
 ## 1) Open Your PowerShell Profile
 
 ```powershell
@@ -186,6 +197,13 @@ function use-personal { use-profile 'briean' }
 . $PROFILE
 use-list
 use-arvig
+use-status
+```
+
+## 3b) Confirm Auth + Profile Switching
+
+```powershell
+use-profile -Strict arvig
 use-status
 ```
 

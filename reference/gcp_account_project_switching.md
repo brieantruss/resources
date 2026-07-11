@@ -7,6 +7,12 @@ Use one command to switch all local context between environments (account, proje
 
 ## 30-Second Quick Start
 
+Do this first on any machine before using profile commands:
+
+gcloud auth login --update-adc
+gcloud auth application-default login
+gh auth login
+
 Run this once per new terminal:
 
 source ~/.bashrc
@@ -157,13 +163,16 @@ Then run:
 source ~/.bashrc
 use-default
 
-## First-Time Auth Notes
-If switching fails due to auth, run:
+## Required Auth Step (New Machine)
+Run these before profile switching commands:
 
-gcloud auth login ACCOUNT_EMAIL --update-adc
+gcloud auth login --update-adc
 gcloud auth application-default login
+gh auth login
 
-Then run your one-word switch command again.
+Then run a strict switch to confirm:
+
+use-profile --strict arvig
 
 ## Important Separation
 - git config controls commit author identity only.
