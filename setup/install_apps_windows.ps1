@@ -16,6 +16,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Set execution policy to allow script to run
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+
 function Write-Header {
     param([string]$Title)
     Write-Host ""
@@ -61,9 +64,9 @@ function Install-WingetPackage {
     }
 
     $commonArgs = @("--accept-source-agreements", "--accept-package-agreements")
-
-    try {
-        if ($Id) {
+--source winget @commonArgs
+        } elseif ($FallbackName) {
+            winget install --name $FallbackName --source winget
             winget install --id $Id -e @commonArgs
         } elseif ($FallbackName) {
             winget install --name $FallbackName @commonArgs
@@ -74,7 +77,7 @@ function Install-WingetPackage {
     } catch {
         if ($FallbackName) {
             Write-Host "Primary install failed for $DisplayName. Retrying by name: $FallbackName"
-            winget install --name $FallbackName @commonArgs
+            winget install --name $FallbackName --source winget @commonArgs
             Write-Host "Installed via fallback name: $DisplayName"
         } else {
             throw
