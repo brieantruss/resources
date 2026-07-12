@@ -18,6 +18,25 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# --- Check for Admin ---
+function Test-IsAdmin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+if (-not (Test-IsAdmin)) {
+    Write-Host "ERROR: This script must run as Administrator (for OpenSSH Server installation)."
+    Write-Host ""
+    Write-Host "STEPS TO FIX:"
+    Write-Host "1. Right-click PowerShell"
+    Write-Host "2. Select 'Run as Administrator'"
+    Write-Host "3. Run this command:"
+    Write-Host "   powershell -ExecutionPolicy Bypass -File $($MyInvocation.MyCommand.Path) -AutoConfirm"
+    Write-Host ""
+    exit 1
+}
+
 # Set execution policy to allow script to run
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
