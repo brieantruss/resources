@@ -2,57 +2,13 @@
 
 # This script automates the installation of common applications on Ubuntu Desktop 24.04 LTS.
 # It uses a combination of apt (package manager) and snap (universal packaging system).
-# Logs all installation results to logs/ folder with timestamps.
 
 # --- Configuration ---
 # Set to 'true' if you want the script to automatically proceed without asking for confirmation
 # for certain steps (e.g., adding repositories). Be cautious with this!
 AUTO_CONFIRM=false
 
-# --- Logging Setup ---
-LOGS_DIR="$(dirname "$0")/../logs"
-INSTALL_LOG=""
-LOG_START_TIME=$(date '+%Y%m%d_%H%M%S')
-LOG_FILE="$LOGS_DIR/install_summary_$LOG_START_TIME.txt"
-
-mkdir -p "$LOGS_DIR"
-
 # --- Functions ---
-log_result() {
-    local component="$1"
-    local status="$2"
-    local message="${3:-}"
-    
-    if [ -n "$message" ]; then
-        INSTALL_LOG+="[$status]  $component - $message"$'\n'
-        echo "$component - $status ($message)"
-    else
-        INSTALL_LOG+="[$status]  $component"$'\n'
-        echo "$component - $status"
-    fi
-}
-
-write_install_summary() {
-    local end_time=$(date '+%Y-%m-%d %H:%M:%S')
-    local start_display=$(date -d "$LOG_START_TIME" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || date '+%Y-%m-%d %H:%M:%S')
-    
-    {
-        echo "=== Ubuntu Install Summary ==="
-        echo "Start Time: $start_display"
-        echo "End Time: $end_time"
-        echo ""
-        echo "RESULTS:"
-        echo "$INSTALL_LOG"
-        echo ""
-        echo "Log file: $LOG_FILE"
-    } | tee "$LOG_FILE"
-    
-    echo ""
-    echo "=========================================="
-    echo "Summary saved to: $LOG_FILE"
-    echo "=========================================="
-}
-
 # Function to check if a command exists
 command_exists () {
     type "$1" &> /dev/null ;
@@ -93,13 +49,11 @@ sudo apt upgrade -y || { echo "Failed to upgrade packages. Continuing..."; }
 print_header "Installing Python 3.12"
 if command_exists python3.12; then
     echo "Python 3.12 is already installed."
-    log_result "Python 3.12" "Already Installed"
 else
     if confirm_action "Install Python 3.12?"; then
-        sudo apt install python3.12 -y && log_result "Python 3.12" "Success" || log_result "Python 3.12" "Failed"
+        sudo apt install python3.12 -y || echo "Failed to install Python 3.12."
     else
         echo "Skipping Python 3.12 installation."
-        log_result "Python 3.12" "Skipped"
     fi
 fi
 
@@ -211,13 +165,11 @@ fi
 # --- Install Git ---
 print_header "Installing Git"
 # Git is usually in the default Ubuntu repositories.
-    log_result "Git" "Already Installed"
+if command_exists git; then
+    echo "Git is already installed."
 else
     if confirm_action "Install Git?"; then
-        sudo apt install git -y && log_result "Git" "Success" || log_result "Git" "Failed"
-    else
-        echo "Skipping Git installation."
-        log_result "Git" "Skipped"Failed to install Git."
+        sudo apt install git -y || echo "Failed to install Git."
     else
         echo "Skipping Git installation."
     fi
@@ -226,34 +178,30 @@ fi
 # --- Git Global Configuration ---
 print_header "Git Global Configuration"
 if command_exists git; then
-    if confirm_action "Set global Git user email (btruss@moduloinsi&& \
-        git config --global user.name "Briean Truss" && \
-        log_result "Git Global Config" "Success" || log_result "Git Global Config" "Failed"
+    if confirm_action "Set global Git user email (btruss@moduloinsights.com) and name (Briean Truss)?"; then
+        echo "Setting global user.email..."
+        git config --global user.email "btruss@moduloinsights.com" || echo "Failed to set user.email."
+        echo "Setting global user.name..."
+        git config --global user.name "Briean Truss" || echo "Failed to set user.name."
     else
         echo "Skipping Git global configuration."
-        log_result "Git Global Config" "Skipped"
     fi
-else
-    echo "Git is not installed, skipping global configuration."
-    log_result "Git Global Config" "Skipped" "Git not installed
 else
     echo "Git is not installed, skipping global configuration."
 fi
 
 # --- Install GitHub CLI (gh) ---
 print_header "Installing GitHub CLI (gh)"
-    log_result "GitHub CLI" "Already Installed"
+if command_exists gh; then
+    echo "GitHub CLI (gh) is already installed."
 else
     if confirm_action "Install GitHub CLI (gh)?"; then
         echo "Adding GitHub CLI repository..."
-        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y) && \
+        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
         curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
         sudo apt update -y && \
-        sudo apt install gh -y && log_result "GitHub CLI" "Success" || log_result "GitHub CLI" "Failed"
-    else
-        echo "Skipping GitHub CLI (gh) installation."
-        log_result "GitHub CLI" "Skippedstall GitHub CLI (gh)."
+        sudo apt install gh -y || echo "Failed to install GitHub CLI (gh)."
     else
         echo "Skipping GitHub CLI (gh) installation."
     fi
@@ -266,15 +214,12 @@ print_header "Configuring SSH, GitHub CLI, and Cloning Reference Repo"
 
 # 1. Install and Enable OpenSSH Server
 if ! command_exists sshd; then
-    if confirm_action "Install and enable O&& log_result "OpenSSH Server" "Success" || log_result "OpenSSH Server" "Failed"
+    if confirm_action "Install and enable OpenSSH Server?"; then
+        echo "Installing openssh-server..."
+        sudo apt install openssh-server -y || echo "Failed to install openssh-server."
         echo "Enabling and starting SSH service..."
         sudo systemctl enable --now ssh || echo "Failed to enable/start ssh service."
     else
-        echo "Skipping OpenSSH Server installation."
-        log_result "OpenSSH Server" "Skipped"
-    fi
-else
-    log_result "OpenSSH Server" "Already Installed"se
         echo "Skipping OpenSSH Server installation."
     fi
 fi
@@ -450,6 +395,7 @@ else
     fi
 fi
 
+echo ""
 echo "Installation script finished."
 echo "----------------------------------------------------------------------"
 echo "⚠️ IMPORTANT POST-INSTALLATION STEPS:"
@@ -459,5 +405,3 @@ echo "* If you configured **GitHub CLI (gh)**, you will need to complete the"
 echo "  authentication process (Web browser/SSH) when prompted during the run."
 echo "* Your Git global user configuration is set: **Briean Truss <btruss@moduloinsights.com>**"
 echo "----------------------------------------------------------------------"
-
-write_install_summary
