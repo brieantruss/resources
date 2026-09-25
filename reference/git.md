@@ -226,3 +226,121 @@ You can now use the Chat view (Ctrl+Alt+I) to issue commands such as:
 "/github-dataform-sync create a pull request for the updated assertions"
 
 This keeps your local edits in sync with GitHub, triggers compilations correctly in GCP Dataform, and lets your local AI development environment fully comprehend your data architecture.
+
+
+# Git Object Inspection and Plumbing Reference
+
+This guide covers low-level Git commands ("plumbing") and inspection tools used to examine the `.git` directory, explore Git objects (`commit`, `tree`, `blob`, `tag`), and inspect repository internals.
+
+---
+
+## 1. Inspecting Object Database Internals
+
+Git objects reside in `.git/objects/`. Each loose object is addressed by a 40-character SHA-1 (or SHA-256) hash where the first 2 characters form the directory and the remaining 38 form the filename.
+
+### Inspect Object Type
+To determine if an object is a `commit`, `tree`, `blob`, or `tag`:
+```bash
+git cat-file -t <object-hash>
+# Example:
+git cat-file -t 03abda36195adee239a5a3a4f400e2b8d3c71371
+```
+
+### Inspect Object Contents ("Pretty-Print")
+Decompresses and prints the contents of any object according to its type:
+```bash
+git cat-file -p <object-hash>
+```
+* **For a `commit`:** Displays tree hash, parent hash, author, committer, and commit message.
+* **For a `tree`:** Displays permissions, object types, hashes, and filenames for that folder level.
+* **For a `blob`:** Prints the exact raw file contents.
+
+### Check Object Size
+Returns the uncompressed size of the object in bytes:
+```bash
+git cat-file -s <object-hash>
+```
+
+---
+
+## 2. Listing and Traversing Objects
+
+### List All Reachable Objects
+Prints the hash and path of all reachable objects (`commits`, `trees`, `blobs`) across all branches:
+```bash
+git rev-list --objects --all
+```
+
+### Search Specific Commits by Message (from your hook)
+Finds commit hashes in a given range matching a specific pattern:
+```bash
+git rev-list -n 1 --grep '^WIP' <range>
+# Example:
+git rev-list -n 1 --grep '^WIP' HEAD~5..HEAD
+```
+
+### Inspect Tree Contents Directly
+Lists the contents of a tree object without needing the raw tree hash (accepts branch names, `HEAD`, or tags):
+```bash
+git ls-tree HEAD
+git ls-tree -r --name-only HEAD    # Recursive list of all tracked filenames
+```
+
+### Batch Inspect All Loose Objects in Bash
+Scan every loose file under `.git/objects/` and print its full hash and object type:
+```bash
+for obj in $(find .git/objects/??/ -type f | sed 's|.git/objects/||;s|/||'); do
+    printf "%s: %s\n" "$obj" "$(git cat-file -t "$obj")"
+done
+```
+
+---
+
+## 3. Repository Health and Packfiles
+
+### Count Loose Objects and Disk Usage
+Provides a breakdown of loose vs. packed objects and disk space consumed:
+```bash
+git count-objects -v
+```
+
+### Verify and Inspect Packfile Contents
+Inspect objects that have been bundled into `.git/objects/pack/*.pack`:
+```bash
+git verify-pack -v .git/objects/pack/*.idx
+```
+
+### Pack Loose Objects Manually
+Compresses loose objects into packfiles and prunes unreachable history:
+```bash
+git gc
+```
+
+---
+
+## 4. Low-Level Object Creation ("Plumbing")
+
+### Hash and Store an Object
+Computes the SHA hash of data or a file, optionally writing it to `.git/objects`:
+```bash
+# Calculate hash only:
+git hash-object path/to/file
+
+# Calculate hash and write to .git/objects:
+git hash-object -w path/to/file
+
+# From stdin (as seen in the pre-push script):
+git hash-object --stdin </dev/null
+```
+
+---
+
+## 5. Working Tree & History (Porcelain)
+
+| Command | Description |
+| :--- | :--- |
+| `git commit -m "<msg>"` | Records a new snapshot to the local `.git` repository database. |
+| `git push <remote> <branch>` | Transmits local commits to a remote server and updates remote references. |
+| `git log --oneline --graph` | Displays human-readable history showing commits and branch topology. |
+| `git rev-parse HEAD` | Resolves a reference (like `HEAD` or a branch name) to its full 40-character commit hash. |
+| `git rev-parse --git-dir` | Returns the path to the current repository's `.git` folder. |

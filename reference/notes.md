@@ -6,7 +6,7 @@ cd /home/briean/development/reference
 
 ## Modulo-0 Connect:
 
-ssh modulo@192.168.0.110
+ssh modulo@10.0.0.110
 
 ## Spark Directory:
 
@@ -123,20 +123,24 @@ cp /home/briean/development/health_stats/etl/transform_steps.py /home/briean/dev
 
 ## Copy From One Machine to Another
 
-scp /home/briean/Downloads/'Finances - Master.xlsx' modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/Downloads/'Finances - Master.xlsx' modulo@10.0.0.110:/home/modulo/finances/
 
-scp /home/briean/Downloads/'Finances  - Budget.csv' modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/Downloads/'Finances  - Budget.csv' modulo@10.0.0.110:/home/modulo/finances/
 
-scp /home/briean/Downloads/'Finances  - Income Statement.csv' modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/Downloads/'Finances  - Income Statement.csv' modulo@10.0.0.110:/home/modulo/finances/
 
-scp /home/briean/Downloads/'Finances  - Transactions.csv' modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/Downloads/'Finances  - Transactions.csv' modulo@10.0.0.110:/home/modulo/finances/
 
-scp /home/briean/load_budget.sql modulo@192.168.0.110:/home/modulo/finances/
+scp /home/briean/load_budget.sql modulo@10.0.0.110:/home/modulo/finances/
 
+
+## Copy to another machine recursively (-r) with wildcard
+
+scp -r /home/briean/Downloads/Newshosting/*The.Wire* modulo@192.168.0.110:/mnt/media/tv/the_wire/
 
 ## Submit a Spark Job
 
-spark-submit --master spark://192.168.0.110:7077 transform_steps.py
+spark-submit --master spark://10.0.0.110:7077 transform_steps.py
 
 ## Open Files with Text Editor
 
@@ -150,7 +154,9 @@ libreoffice --calc 'Steps 2025.01.25 Samsung Health.csv'
 
 tree cwd
 
+## View Computer Architecture
 
+lscpu
 
 ## MySQL Connection Command:
 
