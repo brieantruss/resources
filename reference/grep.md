@@ -169,3 +169,16 @@ grep -oE "HTTP/[0-9.]+ [0-9]{3}" access.log | sort | uniq -c | sort -nr
 | `-c` | Count lines | `-F` | Fixed strings (`fgrep`) |
 | `-l` | Files with matches | `-P` | Perl regex |
 | `-r` | Recursive | `-o` | Show match only |
+
+---
+
+## 10. Deleting an app
+
+### 1. Remove the package and all its config files
+sudo apt purge appname
+
+### 2. Clean out orphaned dependencies that are no longer needed
+sudo apt autoremove --purge
+
+### 3. Clean local user config/cache residue (if any)
+rm -rf ~/.config/appname ~/.cache/appname ~/.local/share/appname

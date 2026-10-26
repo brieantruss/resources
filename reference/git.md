@@ -93,15 +93,20 @@ git pull
 
 ## Create a Repo from an existing directory
 
-git init
+
+git init -b main
+
+printf ".venv/\n.env\n__pycache__/\n*.pyc\n" > .gitignore
 
 git add .
 
 git commit -m "Initial commit"
 
-gh repo create modcron --private --source=. --remote=origin --push
+gh repo create salesforce_ai --public --source=. --remote=origin --push
 
 gh repo create arvig-modulo/scheduled_reports --private --source=. --remote=origin --push
+
+git branch -M main         # Rename master to main
 
 ## store credentials automatically 
 
@@ -137,6 +142,9 @@ git config user.name
 git config user.email
 
 # Switching User Globally
+
+gh auth login --login and sync workspace to github account
+
 
 git config --global user.name "Briean Truss"
 git config --global user.email "briean.j.truss@gmail.com"
